@@ -14,15 +14,15 @@ Este material está dividido em três partes:
 
     1. Programação para não-programadores
     
-Nesta primeira parte apresentaremos os primeiros passos para começarmos a programar utilizando a linguagem R. O objetivo desta primeira parte é que você se sinta familiarizado com a programação e começe a entender o a automatização de tarefas pode te ajudar no seu dia de trabalho.
+Nesta primeira parte apresentaremos os primeiros passos para começarmos a programar utilizando a linguagem R. O objetivo desta parte é que você se sinta familiarizado com a programação e começe a entender a automatização de tarefas que pode te ajudar no seu dia de trabalho.
     
     2. Importação de dados
     
-Aqui começamos a entender como aplicar os conhecimentos anteriores nas nossas áreas de atuação. Veremos como abrir banco de dados em diversos formatos e jeitos.
+Aqui começamos a entender como aplicar os conhecimentos anteriores às nossas áreas de atuação. Veremos como abrir banco de dados em diversos formatos e jeitos.
     
     3. Manipulação de dados
     
-A última parte vai apresentar como manipular dados no R, algo que demanda boa parte do tempo em pesquisas e trabalhos com análise de dados.
+A última parte vai apresentar técnicas de manipulação de dados no R, algo que demanda boa parte do tempo em pesquisas e trabalhos com análise de dados.
 
 <center> Vamos lá? </center>
 
@@ -30,15 +30,15 @@ A última parte vai apresentar como manipular dados no R, algo que demanda boa p
 
 ## Linguagem de programação R
 
-O __R__ é uma linguagem de programação que vem crescendo bastante nos últimos anos. Apesar de inicialmente ter como propósito calculos estatísticos, a linguagem é flexivel o bastante para ir além disso, permitindo lidar diferentes tipos de dados, como por exemplo, textos, números, imagens e etc.
+O __R__ é uma linguagem de programação que vem crescendo bastante nos últimos anos. Apesar de inicialmente ter como propósito cálculos estatísticos, a linguagem é flexivel o bastante para ir além disso, permitindo lidar com diferentes tipos de dados, como por exemplo, textos, números, imagens e etc.
 
-Quando baixamos o __R__ pela primera vez nos assustamos com a sua interface pois, ela não é das mais agradaveis.
+Quando baixamos o __R__ pela primera vez nos assustamos com a sua interface, pois ela não é das mais agradáveis.
 
 ```{r fig.align='center', eval=TRUE}
 knitr::include_graphics("imgs/r_console.png")
 ```
 
-Para solucionar isto e adicionar outras funcionalidades que melhores a experiência de quem utiliza a linguagem foi desenvolvido uma IDE (Ambiente de desenvolvimento integrado) chamado _RStudio_.
+Para solucionar isto e adicionar outras funcionalidades que melhoram a experiência de quem utiliza a linguagem, foi desenvolvido uma IDE (Ambiente de desenvolvimento integrado) chamado _RStudio_.
 
 ## Software RStudio
 
@@ -48,28 +48,28 @@ O _RStudio_ nada mais é que um software, que integrado com o R, permite uma int
 knitr::include_graphics("imgs/rstudio_print.png")
 ```
 
-    A - Console: Local na qual temos o R prompt e que podemos executar linha por linha (chamados de inputs). Além disso, é o local na qual os resultados (chamados de outputs) irão aparecer.
+    A - Console: Local na qual temos o R prompt e que podemos executar linha por linha (chamados de inputs). Além disso, é o local no qual os resultados (chamados de outputs) irão aparecer.
     
-    B - File/Plots/Help: Nesta seção podemos ter acesso as pastas que estamos utilizando durante as nossas rotinas no software, além de visualizar os gráficos gerados a partir das análises e verificar a documentação de funções e pacotes, que explicaremos em breve.
+    B - File/Plots/Help: Nesta seção podemos ter acesso às pastas que estamos utilizando durante as nossas rotinas no software, além de visualizar os gráficos gerados a partir das análises e verificar a documentação de funções e pacotes, que explicaremos em breve.
     
     C - Workspace: Os valores gerados no R, como por exemplo, variáveis e tabelas que você definiu irão aparecer aqui, sobretudo, na aba Environment. E o histórico de códigos rodados na aba History. Veremos nas próximas aulas que a aba Connections é útil caso estejamos conectados com alguma base de dados externa, como por exemplo, Access ou PostgreSQL.
     
-    D - Editor: Aqui é onde os scripts são escritos. Scripts nada mais são do que uma série de comandos salvos em um arquivo. Eles são bons para mantermos a reprodutividade do código, portanto, sempre que formos utilziar o RStudio é recomendado escrever um script.
+    D - Editor: Aqui é onde os scripts são escritos. Scripts nada mais são do que uma série de comandos salvos em um arquivo. Eles são úteis para mantermos a reprodutividade do código, portanto, sempre que formos utilziar o RStudio é recomendado escrever um script.
     
 Podemos então começar a escrever nossas primeiras linhas de código!
 
 # Nossas primeiras linhas de código
 
-Uma das funcionalidades mais básicas do __R__ é realização de operações matemáticas. Se estamos digitando os comandos em um script basta colocarmos o cursos do mouse na linha do código e apertar `Ctrl + Enter` e o resultado sairá no Console, assim como já haviamos mencionado.
+Uma das funcionalidades mais básicas do __R__ é realização de operações matemáticas. Se estamos digitando os comandos em um script basta colocarmos o cursor do mouse na linha do código e apertar `Ctrl + Enter` e o resultado sairá no Console, assim como já havíamos mencionado.
 
 ```{r}
 3 + 1 # Soma
 
-3 - 2 # Subtracao
+3 - 2 # Subtração
 
-4 * 2 # Multiplicacao
+4 * 2 # Multiplicação
 
-5 / 2 # Divisao
+5 / 2 # Divisão
 ```
 
 As saídas (outputs) das operações acima nos permitem introduzir quais são os tipos de dados que podemos trabalhar no __R__, um deles como podemos notar são os números.
@@ -82,7 +82,7 @@ knitr::include_graphics("imgs/TipoDeDados.png")
 
 ### Lidando com números
 
-O tipo mais comum de dado é o tipo númerico. O número de votos que um candidato recebeu, número de ministérios em cada governo e taxa de sucesso do Executivo e etc. Estes valores podem ser classificados em dois tipos: `Inteiros` e `Reais`.
+O tipo mais comum de dado é o tipo númerico. O número de votos que um candidato recebeu, número de ministérios em cada governo e a taxa de sucesso do Executivo e etc..  Estes valores podem ser classificados em dois tipos: `Inteiros` e `Reais`.
 
 ```{r}
 3 # numero inteiro
@@ -120,7 +120,7 @@ Para fazer essa transformação, utilizaremos uma função chamada `factor()` qu
 factor(c("Discordo totalmente", "Discordo parcialmente", "Indiferente", "Concordo parcialmente", "Concordo totalmente"))
 ```
 
-Difernte de quando executamos um dado tipo texto, os dados categóricos apresentam os níveis das categorias (levels). Perceba que as nossas categorias não estão de acordo com o que a escala likert pressupõe e para arrumar este problema, precisamos definir os níveis através de um outro parâmetro da função `factor()` chamado `levels = `.
+Diferente de quando executamos um dado tipo texto, os dados categóricos apresentam os níveis das categorias (levels). Perceba que as nossas categorias não estão de acordo com o que a escala likert pressupõe e para arrumar este problema, precisamos definir os níveis através de um outro parâmetro da função `factor()` chamado `levels = `.
 
 ```{r}
 factor(c("Discordo totalmente", "Discordo parcialmente", "Indiferente", "Concordo parcialmente", "Concordo totalmente"),
@@ -186,7 +186,7 @@ Outras variações utilizadas são o maior ou igual (`>=`) e o menor ou igual (`
 
 Não iremos introduzir essa ideia aqui, mas caso seja de interesse também podemos utilizar as noções de maior e menor para textos. Você teria um palpite de como um texto pode ser maior do que outro?
 
-Além disso, o TRUE/FALSE, como veremos adiante podem ser utilizados em parâmetros de funções, como por exemplo, "Você gostaria que ao fazer a média de um conjunto de valores sejam removidos os valores ausentes?". Se você preenche com TRUE, o resultado provavelmente será númerico, caso preencha com FALSE e você tenha dados ausentes, com toda certeza seu resultado será um valor ausente, ou também chamado de missing.
+Além disso, o TRUE/FALSE, como veremos adiante, podem ser utilizados em parâmetros de funções, como por exemplo, "Você gostaria que ao fazer a média de um conjunto de valores sejam removidos os valores ausentes?". Se você preenche com TRUE, o resultado provavelmente será númerico, caso preencha com FALSE e você tenha dados ausentes, com toda certeza seu resultado será um valor ausente, ou também chamado de missing.
 
 ### Valores ausentes/ missings
 
@@ -204,10 +204,10 @@ is.na(99)
 
 Como você deve ter notado mencionamos algumas vezes a palavra função/funções, mas o que é isso? Podemos pensar cada função como uma __ação__ a ser realizada, como por exemplo, transforme os dados em fatores (`factor()`) ou realize a média (`mean()`) de um conjunto de dados númericos. Ou seja, uma função é um conjunto de instruções que realizam uma tarefa especifica, podendo carregar com parâmetros a serem preenchidos pelo usuário ou não.
 
-Vamos pensar na função `strsplit()`! Ok, se você nunca programou antes talvez não saiba o que ela faz... Para isso exite o que nós chamamos de documentação, um local que nos explica qual é a "ação" que a função realiza e os parâmetros que ela aceita.
+Vamos pensar na função `strsplit()`! Ok, se você nunca programou antes talvez não saiba o que ela faz... Para isso existe o que nós chamamos de documentação, um local que nos explica qual é a "ação" que a função realiza e os parâmetros que ela aceita.
 
 ```{r}
-# Para ver a documentacoa de uma funcao
+# Para ver a documentação de uma função
 ?strsplit()
 ```
 
@@ -233,7 +233,7 @@ Se você tiver mais interesse em saber sobre funções [clique aqui!](https://ww
 
 Segundo a definição do livro R Packages, escrito por Hadley Wickham, um pacote é uma unidade fundamental de compartilhamento de códigos, dados, documentação e testes. Em outras palavras, os pacotes são coleções de códigos (funções) e dados desenvolvidos pela comunidade.
 
-Estes pacotes ficam localizados no que chamamos de repositório, sendo que o principal deles chama-se **C**omprehensive **R** **A**rchive **N**etwork, ou também chamado de CRAN. Mas existem outros também, como o Github, no qual a forma de obter os pacotes muda. Mas como instalamos um pacote no R? A resposta é simples, utilizamos uma função chamada `install.packages()` em que o argumento principal é o nome do pacote que queremos intalar.
+Estes pacotes ficam localizados no que chamamos de repositório. O principal repositório recebe o nome de **C**omprehensive **R** **A**rchive **N**etwork, o também chamado, CRAN. Mas existem outros também, como o Github, no qual a forma de obter os pacotes muda. Mas como instalamos um pacote no R? A resposta é simples, utilizamos uma função chamada `install.packages()` em que o argumento principal é o nome do pacote que queremos instalar.
 
 Uma peculiaridade desta função é que por padrão ela instala os pacotes que estão no CRAN, como por exemplo, vamos instalar um pacote chamado "dplyr"
 
@@ -261,17 +261,17 @@ library(abjutils)
 
 ## Estrutura de dados
 
-As estruturas de dados são maneiras de organizar e guardar dados dentro da linguagem para que possamos trabalhar de forma mais eficiente. No nosso cotidiano utilizaremos três destas estruturas: vetores atômicos, listas e dataframes, divididos em tipos de estruturas homogêneas e heterogêneas. Mas o que isso significa? Basicamente diz respeito a quantidade de tipos de dados que ela pode receber, isto é, estruturas homogêneas só pode receber um tipo de dado, enquanto as estruturas heterogêneas pode receber mais de um tipo de dado.
+As estruturas de dados são maneiras de organizar e guardar dados dentro da linguagem para que possamos trabalhar de forma mais eficiente. No nosso cotidiano utilizaremos três destas estruturas: vetores atômicos, listas e dataframes; divididos em tipos de estruturas homogêneas e heterogêneas. Mas o que isso significa? Basicamente diz respeito a quantidade de tipos de dados que ela pode receber, isto é, estruturas homogêneas só podem receber um tipo de dado, enquanto as estruturas heterogêneas podem receber mais de um tipo de dado.
 
 ### Vetores atômicos
 
-Um vetor atômico é a estrutura mais básica no R e ele nada mais é que um vetor de dados homogêneo e com apenas uma dimensão. Uma analogia interessante talvez o seguinte:
+Um vetor atômico é a estrutura mais básica no R; é um vetor de dados homogêneo com apenas uma dimensão. Uma analogia interessante para entendermos um vetor atômico é a seguinte:
 
-Imaginem um vagão de trêm, consideraremos o vagão como um vetor no qual os valores, isto é, os dados, são o nome dos passageiros, que no caso são variáveis do tipo texto. Se pensarmos em outro vagão podemos pensar na idade dos passageiros.
+Imaginem um vagão de trêm, consideraremos o vagão como um vetor no qual os valores, isto é, os dados são os nomes dos passageiros, que no caso são variáveis do tipo texto. Se pensarmos em outro vagão podemos pensar na idade dos passageiros.
 
-Outro exemplo, e talvez mais próximo da análise de dados seja o seguinte:
+Outro exemplo, talvez mais próximo da análise de dados seja o seguinte:
 
-Estamos querendo trabalhar com dados dos presidentes eleitos de 1945 até 1960, para isso podemos construir vetores que nos informem os nomes, a porcentagem que recebeu, em quantas UF ele ganhou e se seu vice era do mesmo partido.
+Queremos trabalhar com dados dos presidentes eleitos de 1945 até 1960, para isso podemos construir vetores que nos informem os nomes, a porcentagem de votos recebida, a quantidade de UF em que ele ganhou e se seu vice era do mesmo partido.
 
 ```{r}
 c("Dutra", "Vargas", "JK", "Janio Quadros") # presidente eleito
@@ -287,7 +287,7 @@ Perceba então que para construir um vetor basta colocarmos os valores dentro de
 
 #### Atribuindo valores à variáveis (`<-`)
 
-Ocorre que os códigos digitados até aqui apenas são executados no console, o que significa que não estamos salvando estes objetos na memória do computador, o que não nos possibilita manipular as estruturas de uma forma mais facíl. 
+Ocorre que os códigos digitados até aqui apenas são executados no console, o que significa que não estamos salvando estes objetos na memória do computador, o que não nos possibilita manipular as estruturas de uma forma mais fácil. 
 
 ```{r}
 presidente_eleito  <- c("Dutra", "Vargas", "JK", "Janio Quadros") # presidente eleito
@@ -301,7 +301,7 @@ vice_igual_presid <- c(TRUE, FALSE, FALSE, FALSE) # vice do mesmo partido
 
 #### Indexando
 
-Dado que criamos objetos, podemos acessar os valores especificos a partir da posição dentro do vetor, como por exemplo, e se quisermos acessar o primeiro elemento do `presidente_eleito`, isto é, "Dutra"? Para isso basta colocarmos `[]` após o vetor e dentro dele a posição de interesse.
+Dado que criamos objetos, podemos acessar os valores específicos a partir da posição dentro do vetor, como por exemplo, se quisermos acessar o primeiro elemento do `presidente_eleito`, isto é, "Dutra". Para isso basta colocarmos `[]` após o vetor e dentro dele a posição de interesse.
 
 ```{r}
 presidente_eleito[1]
@@ -317,7 +317,7 @@ vitoria_uf[3:4] # Equivalente: vitoria_uf[c(3,4)]
 
 ### Listas
 
-Vamos um guarda-roupa com três gavetas:
+Vamos montar um guarda-roupa com três gavetas:
 
 - Primeira gaveta: 3 meias
 
@@ -335,7 +335,7 @@ Listas são parecidas com vetores atômicos, porém seus elementos podem ser de 
 
 #### Indexando
 
-Apesar de parecido com um vetor atômico, a indexação tem alguns aspectos diferentes! Quando indexamos um vetor, obtemos o elemento a partir de `[]` em que dentro colocamos a posição de interesse, porém se fizermos o mesmo com a lista é como se tivessemos apenas abrindo a gaveta, mas não acessando o que está dentro dela. Ou seja, para acessar o elemento da lista precisamos utilizar `[[]]`.
+Apesar de parecido com um vetor atômico, a indexação tem alguns aspectos diferentes! Quando indexamos um vetor, obtemos o elemento a partir de `[]` em que dentro colocamos a posição de interesse, porém, se fizermos o mesmo com a lista é como se abríssemos apenas a gaveta, mas não acessamos o que está dentro dela. Ou seja, para acessar o elemento da lista precisamos utilizar `[[]]`.
 
 ```{r}
 lista[1] # Obtendo a posicao da lista
@@ -357,7 +357,7 @@ tabela <- data.frame(presidente_eleito = c("Dutra", "Vargas", "JK", "Janio Quadr
 
 #### Indexando 
 
-Como data frames tem mais de uma dimensão, a indexação também, isto é, primeiro indexamos a linha e depois a coluna, como por exemplo,
+Assim como data frames, a indexação também tem mais de uma dimensão, isto é, primeiro indexamos a linha e depois a coluna, como por exemplo:
 
 ```{r}
 tabela[1, 2] # Primeira linha, segunda coluna
@@ -391,9 +391,9 @@ tabela$vice_igual_presid[1]
 
 ## Controladores de Fluxo
 
-É muito comum estabelecermos uma condição para tomar uma decisão, como por exemplo, Porcentagem de votos maior que 50% pode significar vitória, caso contrário, derrota. Além disso, muitas vezes precisamos percorrer diversos valores, como por exemplo, para cada eleição verificamos se o presidente eleito teve mais de 50% dos votos.
+É muito comum estabelecermos uma condição para tomar uma decisão, como por exemplo, 'Porcentagem de votos maior que 50% pode significar vitória, caso contrário, derrota'. Além disso, muitas vezes precisamos percorrer diversos valores, como por exemplo, para cada eleição verificamos se o presidente eleito teve mais de 50% dos votos.
 
-Para que possamos fazer isso podemos utilziar o `if/else` e o `for`!
+Para que possamos fazer isso, utilizaremos o `if/else` e o `for`!
 
 ### if/else
 
@@ -412,7 +412,7 @@ if(<condicao>){
 }
 ```
 
-Podemos interpretá-la da seguinte maneira: Se a condição for verdadeira, execute os comandos 1 e 2, caso contrário, execute os comandos 3 e 4. Pensando em algo menos abstrato podemos dizer que caso o candidato para o pletio tenha adquirido mais de 50% dos votos, ele está eleito, caso contrário, ele perdeu a eleição.
+Podemos interpretá-la da seguinte maneira: Se a condição for verdadeira, execute os comandos 1 e 2, caso contrário, execute os comandos 3 e 4. Pensando em algo menos abstrato podemos dizer que caso o candidato para o pletio tenha recebido mais de 50% dos votos, ele está eleito, caso contrário, ele perdeu a eleição.
 
 ```{r}
 porcentagem_de_votos <- 55
@@ -438,11 +438,11 @@ tabela <- data.frame(ano_da_eleicao = seq(1955, 2015, 5), porcentagem_de_votos =
            tipo_disputa = c(rep("Governo", 3), rep("Presidencia", 3), rep("Governo", 3), rep("Presidencia", 4)))
 ```
 
-Nosso objetivo vai ser: 
+Nosso objetivo: 
 
-> Criar uma coluna chamada categoria_voto, em que se o voto para a disputa presidencial for maior que 70% chamaremos de super majoritário, caso contrário, normal. Caso a disputa seja para o governo do estados iremos considerar como super majoritário um percentual maior que 80%.
+> Criar uma coluna chamada categoria_voto, na qual, se o voto para a disputa presidencial for maior que 70%, chamaremos de 'super majoritário'; caso contrário, chamaremos de 'normal'. Caso a disputa seja para o governo do estados iremos considerar como 'super majoritário' um percentual maior que 80%.
     
-Porém, vamos enteder como funciona a estrutura de um `for`:
+Porém, vamos entender como funciona a estrutura de um `for`:
 
 ```{r}
 for (i in x){
@@ -465,11 +465,11 @@ Vamos entender algumas coisas aqui,
 
 - Quando temos 1:nrow(tabela), estamos criando um vetor com uma sequência de 1 até o número de linhas da nossa tabela, no caso, 13. Isso significa que nosso `for` vai percorrer as treze linhas da tabela.
 
-- o `i` vai assumir os valores de 1 até 13, por isso utilizamos tabela$porcentagem_de_votos[i], ou seja, estamos indexando a tabelas pelos valores que `i` assumi.
+- o `i` assumirá os valores de 1 até 13, por isso utilizamos tabela$porcentagem_de_votos[i], ou seja, estamos indexando as tabelas pelos valores que `i` assume.
 
-Vamos agora resolver o nosso objetivo principal: 
+Vamos agora voltar ao nosso objetivo principal: 
 
-> Criar uma coluna chamada categoria_voto, em que se o voto para a disputa presidencial for maior que 70% chamaremos de super majoritário, caso contrário, normal. Caso a disputa seja para o governo do estados iremos considerar como super majoritário um percentual maior que 80%.
+> Criar uma coluna chamada categoria_voto, na qual, se o voto para a disputa presidencial for maior que 70% chamaremos de 'super majoritário', caso contrário, chamaremos de 'normal'. Caso a disputa seja para o governo do estados iremos considerar como 'super majoritário' um percentual maior que 80%.
 
 ```{r}
 tabela$categoria_voto <- NA # Criando uma coluna vazia
@@ -498,7 +498,7 @@ print(tabela)
 
 Marque verdadeiro ou falso. Caso verdadeiro, informe o tipo de dado:
 
-Obs: Caso aparece "+" no seu console ao testar as afirmações, basta apertar "Esc"
+Obs: Caso apareça "+" no seu console ao testar as afirmações, basta apertar "Esc"
 
 1. `33,5`
 
