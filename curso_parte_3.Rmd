@@ -1,0 +1,98 @@
+---
+title: "Curso NECI - Parte III"
+author: "P4H"
+date: "25 de janeiro de 2019"
+output: html_document
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, warning=FALSE, message=FALSE, eval=FALSE)
+```
+
+# Manipulação de Dados
+
+Vamos começar com um exemplo: Somos um grupo de mineradores e precisamos trabalhar em um local muito difícil. O terreno que vamos trabalhar tem uma estrutura precária, regiões muito íngremes, muita sujeira e assim por diante, porém, nós temos um objetivo muito claro que é encontrar o ouro na região. Vamos conseguir encontrar? Não sei, mas precisamos começar os trabalhos para saber.
+
+O trabalho consiste em selecionar os melhores locais, ter uma boa precisão e assim por diante. Isso é a manipulação de dados! Precisamos trabalhar com tabelas ou estrutura de dados muito complexas, sujas e sem estrutura correta para que possamos retirar insights importantes para nossas pesquisas.
+
+[colocar o ciclo de ciencia de dados]
+
+# O que é tidyverse?
+
+Uma das principais ferramentas que utilizaremos nesta parte é o `tidyverse`. Este pacote nada mais é uma coleção de outros pacotes feitos para ciência de dados, ou seja, ele tem pacotes para cada parte do ciclo de ciência de dados que vimos anteriormente, como por exemplo.
+
+- Importação (readr, DBI)
+
+- Tidy (tidyr)
+
+- Transformação (dplyr)
+
+- Visualização (ggplot2)
+
+- Modelagem (modelr)
+
+Como já conversamos anteriormente, não iremos passar por todas as etapas do ciclo, mas caso tenha interesse em aprofundar seus conhecimentos basta acessar o livro [R for Data Science](https://r4ds.had.co.nz/).
+
+Pois bem para _instalar_ o tidyverse basta digitarmos `install.packages("tidyverse")` e a partir daí esperar a instalação de todos os pacotes (este processo pode demorar!). E assim como todos os pacotes intalados podemos habilitá-los utilizando `library(tidyverse)`. 
+
+Como nosso foco é a manipulação de dados iremos trabalhar com os seguintes pacotes: `tidyr`, `dplyr`, `lubridate` e `stringr`. Utilizando como contexto as eleições de 2016 de SP, RJ e MG.
+
+Vamos começar habilitando o `tidyverse` e importando as tabelas `votacao_candidato.csv` e `candidatos.csv` para o ambiente do RStudio.
+
+```{r}
+library(tidyverse)
+
+
+votacao_candidato <- read_delim("data/votacao_candidato.csv", delim = ";") # Escolhi o read_delim para poder definir o separador
+candidatos <- read_delim("data/candidatos.csv", delim = ";")
+```
+
+Feito isso, podemos começar a entender a manipulação de dados com o `tidyr`.
+
+# tidyr
+
+O `tidyr` é o pacote utilizado para estruturar os nossos bancos de dados. Em geral, ele pode ser utilizado para __unir__ (`unite`) e __separar__ (`separete`) colunas ou para __derreter__ (`gather`) e __esticar__ (`spread`) as colunas. As duas primeiras operações são mais simples. Então, iremos começar por elas.
+
+## separete e unite
+
+### separate
+
+Digamos que sejá útil para a gente, obter o dia, o mês e o ano de nascimento de cada candidato em colunas separadas ao invés de em uma única (DT_NASCIMENTO). Nesse caso, a função `separete` pode nos ajudar bastante.Como ela funciona? O primeiro parâmetro é o nosso banco de dados, o segundo é o nome da coluna que desejamos separar, o terceiro é o nome das novas variáveis e, por fim, o quarto é o separador.
+
+```{r}
+candidatos <- candidatos %>%separate(DT_NASCIMENTO,into = c("DT_NASCIMENTO_DIA","DT_NASCIMENTO_MES","DT_NASCIMENTO_ANO"),seo = ",")
+```
+
+```{r}
+candidatos %>%select(DT_NASCIMENTO_DIA, DT_NASCIMENTO_MES, DT_NASCIMENTO_ANO)
+```
+
+Bem simples, não?
+  
+### unite
+  
+A função `unite` faz o oposto da `separete`. Ela __uni__ ou __concatena__ colunas.Que tal unirmos a sigla do partido e o nome do partido? Desse jeito, teremos, ao invés de, por exemplo, "PSL" e "Parito Social Liberal" em duas variáveis distintas, obteríamos uma única colunas com "PSL Partido Social Liberal". Nesse caso, podemos até adicionar um hífem entre as variáeis, obtendo "PSL - Partido Social Liberal".
+
+Como operar isso? A função `unite` recebe no primeiro parâmetro o banco de dados e no segundo o nome da __nova__ variável. Em seguida, podemos adicionar os nodemos de todas as colunas que queremos concatenar e, por fim, podemos escolher o separador entre as colunas.
+
+```{r}
+candidatos <- candidatos %>%unite("SIGLA_NOME_PARTIDO", SG_PARTIDO, NM_PARTIDO, sep = " - ")
+```
+
+```{r}
+candidatos %>%select("SIGLA_NOME_PARTIDO")
+```
+
+## exemplo com gather e spread
+
+`gather` e `spread` realizam operações opostas
+
+# dplyr e seus verbos
+
+## Verbos
+
+## Joins
+
+# lubridate
+
+# stringr
