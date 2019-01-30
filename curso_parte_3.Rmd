@@ -42,9 +42,8 @@ Vamos começar habilitando o `tidyverse` e importando as tabelas `votacao_candid
 ```{r}
 library(tidyverse)
 
-
-votacao_candidato <- read_delim("data/votacao_candidato.csv", delim = ";") # Escolhi o read_delim para poder definir o separador
-candidatos <- read_delim("data/candidatos.csv", delim = ";")
+votacao_candidato <- read_delim("data/votacao_candidato.gz", delim = ",") # Escolhi o read_delim para poder definir o separador
+candidatos <- read_delim("data/candidatos.gz", delim = ",")
 ```
 
 Feito isso, podemos começar a entender a manipulação de dados com o `tidyr`.
@@ -60,11 +59,13 @@ O `tidyr` é o pacote utilizado para estruturar os nossos bancos de dados. Em ge
 Digamos que sejá útil para a gente, obter o dia, o mês e o ano de nascimento de cada candidato em colunas separadas ao invés de em uma única (DT_NASCIMENTO). Nesse caso, a função `separete` pode nos ajudar bastante.Como ela funciona? O primeiro parâmetro é o nosso banco de dados, o segundo é o nome da coluna que desejamos separar, o terceiro é o nome das novas variáveis e, por fim, o quarto é o separador.
 
 ```{r}
-candidatos <- candidatos %>%separate(DT_NASCIMENTO,into = c("DT_NASCIMENTO_DIA","DT_NASCIMENTO_MES","DT_NASCIMENTO_ANO"),seo = ",")
+candidatos <- candidatos %>%
+  separate(DT_NASCIMENTO,into = c("DT_NASCIMENTO_DIA","DT_NASCIMENTO_MES","DT_NASCIMENTO_ANO"),seo = ",")
 ```
 
 ```{r}
-candidatos %>%select(DT_NASCIMENTO_DIA, DT_NASCIMENTO_MES, DT_NASCIMENTO_ANO)
+candidatos %>%
+  select(DT_NASCIMENTO_DIA, DT_NASCIMENTO_MES, DT_NASCIMENTO_ANO)
 ```
 
 Bem simples, não?
@@ -76,16 +77,47 @@ A função `unite` faz o oposto da `separete`. Ela __uni__ ou __concatena__ colu
 Como operar isso? A função `unite` recebe no primeiro parâmetro o banco de dados e no segundo o nome da __nova__ variável. Em seguida, podemos adicionar os nodemos de todas as colunas que queremos concatenar e, por fim, podemos escolher o separador entre as colunas.
 
 ```{r}
-candidatos <- candidatos %>%unite("SIGLA_NOME_PARTIDO", SG_PARTIDO, NM_PARTIDO, sep = " - ")
+candidatos <- candidatos %>%
+  unite("SIGLA_NOME_PARTIDO", SG_PARTIDO, NM_PARTIDO, sep = " - ")
 ```
 
 ```{r}
-candidatos %>%select("SIGLA_NOME_PARTIDO")
+candidatos %>%
+  select("SIGLA_NOME_PARTIDO")
 ```
 
 ## exemplo com gather e spread
 
-`gather` e `spread` realizam operações opostas
+`gather` e `spread` realizam operações opostas.
+
+`gather` é utilizado para derreter as colunas dos nossos bancos. Vamos imaginar que temos um banco de dados com o a performance dos partidos (total de votos) para cada cargo nas eleições municipais de 2016.
+
+```{r}
+votos_partidos <- read_csv('data/total_votos_partidos.csv')
+
+head(votos_partidos)
+```
+
+Tendo em vista os princípios de um banco Tidy, qual o problema desse banco de dados?
+
+As colunas não contêm variáveis, mas __valores__ de variáveis. Qual? O cargo pleiteado pelos candidatos. Para ajustar isso, podemos utilizar a função `gather`. Ela recebe, no primeiro parâmetro, o banco de dados; no segundo, fornecemos as colunas nas quais desejamos realizar a operação. No parâmetro `key`, o nome da variável dos valores, contidos nos cabeçalhos das colunas; no parâmetro `value`, o nome da variável dos valores contidas nas células das colunas. 
+
+```{r}
+votos_partidos_tidy <- votos_partidos %>% 
+  gather(PREFEITO:VEREADOR, key = "DESCRICAO_CARGO", value = "TOTAL_VOTOS")
+
+head(votos_partidos_tidy)
+```
+
+A função `spread` realiza a operação inversa. Por que iríamos querer fazer isso? Às vezes, pode ser útil para algumas transformações no nosso banco, organizá-lo de uma maneira não Tidy. Além disso, a visualização de tabelas não é muito intuitiva quando o banco está Tidy.
+
+Para "esticar" um banco, utilizamos a função `spread`. Ela recebe o banco no primeiro parâmetro, o nome da variável que ocupará os cabeçalhos das colunas no segundo e, no terceiro, a variável que ocupará as células.
+
+```{r}
+votos_partidos_tidy %>% 
+  spread(DESCRICAO_CARGO, TOTAL_VOTOS)
+```
+
 
 # dplyr e seus verbos
 
