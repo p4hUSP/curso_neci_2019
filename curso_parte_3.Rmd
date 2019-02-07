@@ -59,13 +59,11 @@ O `tidyr` é o pacote utilizado para estruturar os nossos bancos de dados. Em ge
 Digamos que sejá útil para a gente, obter o dia, o mês e o ano de nascimento de cada candidato em colunas separadas ao invés de em uma única (DT_NASCIMENTO). Nesse caso, a função `separete` pode nos ajudar bastante.Como ela funciona? O primeiro parâmetro é o nosso banco de dados, o segundo é o nome da coluna que desejamos separar, o terceiro é o nome das novas variáveis e, por fim, o quarto é o separador.
 
 ```{r}
-candidatos <- candidatos %>%
-  separate(DT_NASCIMENTO,into = c("DT_NASCIMENTO_DIA","DT_NASCIMENTO_MES","DT_NASCIMENTO_ANO"),seo = ",")
+candidatos <- separate(candidatos, DT_NASCIMENTO,into = c("DT_NASCIMENTO_DIA","DT_NASCIMENTO_MES","DT_NASCIMENTO_ANO"),seo = ",")
 ```
 
 ```{r}
-candidatos %>%
-  select(DT_NASCIMENTO_DIA, DT_NASCIMENTO_MES, DT_NASCIMENTO_ANO)
+select(candidatos, DT_NASCIMENTO_DIA, DT_NASCIMENTO_MES, DT_NASCIMENTO_ANO)
 ```
 
 Bem simples, não?
@@ -77,13 +75,11 @@ A função `unite` faz o oposto da `separete`. Ela __uni__ ou __concatena__ colu
 Como operar isso? A função `unite` recebe no primeiro parâmetro o banco de dados e no segundo o nome da __nova__ variável. Em seguida, podemos adicionar os nodemos de todas as colunas que queremos concatenar e, por fim, podemos escolher o separador entre as colunas.
 
 ```{r}
-candidatos <- candidatos %>%
-  unite("SIGLA_NOME_PARTIDO", SG_PARTIDO, NM_PARTIDO, sep = " - ")
+candidatos <- unite(candidatos, "SIGLA_NOME_PARTIDO", SG_PARTIDO, NM_PARTIDO, sep = " - ")
 ```
 
 ```{r}
-candidatos %>%
-  select("SIGLA_NOME_PARTIDO")
+select(candidatos, "SIGLA_NOME_PARTIDO")
 ```
 
 ## exemplo com gather e spread
@@ -103,8 +99,7 @@ Tendo em vista os princípios de um banco Tidy, qual o problema desse banco de d
 As colunas não contêm variáveis, mas __valores__ de variáveis. Qual? O cargo pleiteado pelos candidatos. Para ajustar isso, podemos utilizar a função `gather`. Ela recebe, no primeiro parâmetro, o banco de dados; no segundo, fornecemos as colunas nas quais desejamos realizar a operação. No parâmetro `key`, o nome da variável dos valores, contidos nos cabeçalhos das colunas; no parâmetro `value`, o nome da variável dos valores contidas nas células das colunas. 
 
 ```{r}
-votos_partidos_tidy <- votos_partidos %>% 
-  gather(PREFEITO:VEREADOR, key = "DESCRICAO_CARGO", value = "TOTAL_VOTOS")
+votos_partidos_tidy <- gather(votos_partidos, PREFEITO:VEREADOR, key = "DESCRICAO_CARGO", value = "TOTAL_VOTOS")
 
 head(votos_partidos_tidy)
 ```
@@ -114,16 +109,110 @@ A função `spread` realiza a operação inversa. Por que iríamos querer fazer 
 Para "esticar" um banco, utilizamos a função `spread`. Ela recebe o banco no primeiro parâmetro, o nome da variável que ocupará os cabeçalhos das colunas no segundo e, no terceiro, a variável que ocupará as células.
 
 ```{r}
-votos_partidos_tidy %>% 
-  spread(DESCRICAO_CARGO, TOTAL_VOTOS)
+spread(votos_partidos_tidy, DESCRICAO_CARGO, TOTAL_VOTOS)
 ```
 
 
 # dplyr e seus verbos
 
+Para tornar a manipulação de dados mais eficiente, foi criado um pacote chamado de dplyr que possui uma série de ferramentas para filtrar, selecionar e sumarizar informações, como veremos a seguir. Iremos ver duas caracteristicas importantes deste pacote, os "verbos" e os joins.
+
 ## Verbos
 
+Os principais verbos do dplyr são:
+
+1. `filter`: filtra as linhas de um banco de dados de acordo com uma regra lógica.
+
+2. `mutate`: modifica ou cria colunas de acordo com valores fornecidos.
+
+3. `count`: conta os valores e uma variável.
+
+    + Especialmente útil para variáveis categóricas.
+    
+4. `group_by` e `summarise`: são funções normalmente utilizadas em conjunto. Elas permitem realizar operações de agregações com o banco de dados e, assim, alterar a nossa unidade de análise. 
+
+5. `rename`: altera o nome das variáveis (colunas).
+
+Porém, não ficaremos apenas nestes verbos, veremos algumas de suas variações também e conheceremos o famoso `%>%` (pipe)
+
 ## Joins
+
+Muitas vezes precisamos combinar informações de tabelas diferentes para conseguir responder as nossas perguntas, como por exemplo, vejamos as tabelas abaixo:
+
+```{r}
+
+```
+
+Estas duas tabelas são referentes à votos recebidos por um determinado candidato e a doação relacionada com ele porém, elas são duas tabelas diferentes cuja única fonte de ligação entre elas é a variável "ID". Sendo assim, para conectá-las precisaremos fazer com que exista um match entre ID e aqui entram os diferentes tipos de joins.
+
+Os `*_join()` nada mais são que funções que ajudam a combinar duas tabelas através de uma "variável de ligação", que normalmente costuma ser uma variável de identificação única da observação, como por exemplo, o CPF de um indivíduo.
+
+```{r}
+tbl_votos <- data.frame(ID = c("112", "132", "345", "500"),
+                        CANDIDATO = c("CAIO", "MARIA", "ENZO", "JULIA"),
+                        VOTOS = c(2000, 3400, 100, 2100),
+                        stringsAsFactors = FALSE) # PARA EVITAR QUE OS DADOS SEJAM TRANSFORMADOS EM CATEGORICOS
+
+tbl_empresas <- data.frame(ID_CANDIDATO = c("132", "600", "112", "345", "700"),
+                           EMPRESA_DOADORA = c("Empresa 1", "Empresa 2", "Empresa 1", "Empresa 4", "Empresa 5"),
+                           VALOR_DOACAO = c(1000, 2000, 500, 1500, 5000),
+                           ID_EMPRESA = c("12", "33", "12", "38", "55"), 
+                           stringsAsFactors = FALSE)
+```
+
+### `inner_join()`
+
+O primeiro join que veremos é o `inner_join()`, que retorna a intersecção das tabelas `tbl_votos` e `tbl_empresas`, ou seja, a saída é uma nova tabela com informações em comum entre os dados. No caso exemplificado, o resultado são três observações em comum entre as tabelas dado o mesmo ID.
+
+Perceba que para montar a função de join, precisamos de três argumentos:
+
+- x: que aqui chamaremos de tabela à esquerda
+
+- y: que aqui chamaremos de tabela à direita
+
+- by: argumento que especifica qual é a variável de ligação entre as tabelas. Caso a variável tenha o mesmo nome das duas tabelas, você pode colocar apenas o nome da variável, como por exemplo, `by = "ID"`. Porém, caso os nomes sejam diferentes o padrão para especificar é `by = c("variavel_tbl_esquerda" = "variavel_tbl_direita")`.
+
+```{r}
+inner_join(tbl_votos, tbl_empresas, by = c("ID" = "ID_CANDIDATO"))
+```
+
+### `left_join()` e `right_join()`
+
+  Nesse caso pensamos se queremos que a nossa tabela pós join tenha o número de linhas da tabela da esqueda (`left_join`) ou da tabela da direita (`right_join`), utilizando o mesmo padrão do exemplo anterior.
+  
+```{r}
+# Left join
+left_join(tbl_votos, tbl_empresas, by = c("ID" = "ID_CANDIDATO"))
+```
+
+Perceba que todas as observações da tabela da esquerda estão no resultado final, porém o ID de número 500 tem observações missing. Isso se dá devido ao fato de que na tabela da direita não existe referência ao seu ID.
+
+Caso o intuito seja manter todas as linhas da tabela da direita utilizamos o `right_join`.
+
+```{r}
+# Right join
+right_join(tbl_votos, tbl_empresas, by = c("ID" = "ID_CANDIDATO"))
+```
+
+### `full_join()`
+
+Mas se quisermos juntar todas as observações das duas tabelas podemos utilizar o `full_join`
+
+```{r}
+full_join(tbl_votos, tbl_empresas, by = c("ID" = "ID_CANDIDATO"))
+```
+
+### `anti_join()`
+
+E se quisermos somente as observações que não dão match entre as tabelas? Usamos `anti_join()`. Porém, neste caso, temos que mudar a ordem das tabelas para observar quais casos não deram match.
+
+```{r}
+anti_join(tbl_votos, tbl_empresas, by = c("ID" = "ID_CANDIDATO"))
+```
+
+```{r}
+anti_join(tbl_empresas, tbl_votos, by = c("ID_CANDIDATO" = "ID")) # lembre-se de alterar a ordem do by
+```
 
 # lubridate
 
