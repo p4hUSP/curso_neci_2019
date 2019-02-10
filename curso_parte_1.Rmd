@@ -26,6 +26,24 @@ A última parte vai apresentar técnicas de manipulação de dados no R, algo qu
 
 <center> Vamos lá? </center>
 
+## Parte 1 - overview
+
+Explorar o ambiente R
+Objetos e atribuições
+Tipos de dados
+Estruturas de dados
+Funções
+Pacotes
+Controle de fluxo
+
+## Primeiro, vamos comparar com os softwares que conhecemos
+
+Abrir ddrevisited_data_v1.xls
+Abrir ddrevisited_data_v1.aacdb
+Abrir ddrevisited_data_v1.dta
+
+Onde estão as variáveis? E as observações?
+
 # O que é o R e o RStudio?
 
 ## Linguagem de programação R
@@ -252,6 +270,32 @@ is.na(NA)
 is.na(99)
 ```
 
+# Exercícios
+
+## Parte A: Tipos de dados
+
+Marque verdadeiro ou falso. Caso verdadeiro, informe o tipo de dado:
+
+Obs: Caso apareça "+" no seu console ao testar as afirmações, basta apertar "Esc"
+
+1. `33,5`
+
+2. `"Olá mundo"`
+
+3. `"O 'R' é uma linguagem legal"`
+
+4. `"O 'R é uma linguagem legal"`
+
+5. `"O 'R é uma linguagem legal'`
+
+6. `400e+10`
+
+7. `factor("oi", levels = c("oi", "tchau"))`
+
+8. `true`
+
+9. `False`
+
 
 ## Estrutura de dados
 
@@ -330,7 +374,7 @@ lista[[1]][1]
 lista[[3]][[1]] # Obtendo o elemento da lista dentro de outra lista
 ```
 
-### Data frames
+### Dataframes
 
 Sabe a planilha do excel, isto é, uma tabela? No R, ela é chamada de data frame! Assim como as listas, data frames são estruturas de dados heterogêneas, sendo entendidos também como um conjunto de vetores nos quais cada elemento é uma observação. 
 
@@ -343,6 +387,16 @@ tabela <- data.frame(presidente_eleito = c("Dutra", "Vargas", "JK", "Janio Quadr
 
 Agora que criamos nosso primeiro dataframe podemos pensar em mais diferenças em relação à manipulação de dados em outros softwares.
 No R, não existe a possibilidade de manipulararmos os dados direto do dataframe. Por isso, usamos funções (que logo mais veremos com mais calma) para conhecer melhor o dataframe.
+
+View(tabela) # mostra o banco no console
+head (tabela) # mostra as seis primeiras linhas do banco no console
+str(tabela)# mostra a estrutura da tabela
+names(tabela) # mostra o nome das variáveis
+
+nrow(tabela) # nº de linhas
+ncol(tabela) #nº de colunas
+dim(tabela) # dimensões
+
 
 
 
@@ -380,6 +434,83 @@ tabela$presidente_eleito
 tabela$vice_igual_presid[1]
 ```
 
+## Exercício 1
+
+1. Crie um dataframe com o nome, idade e filme preferido dos seus colegas de turma.
+Faça um script que documente o passo a passo da criação do dta frame
+2. Crie uma lista composta por 3 elementos.
+Faça um script que documente o passo a passo da criação do dta frame
+Como podemos saber o conteúdo do segundo elemento da lista. Utilze a indexação
+
+## Exercício 2
+
+No R temos, bancos para fins didáticos. Para utilizá-los basta usar a função data. Para esse exercícios utilizaremos o banco mtcars
+data(mtcars)
+1. Visualize o banco. Do que se trata?
+2. Quais são suas variáveis?
+3. E suas dimensões?
+4. Selecione as 10 primeiras observações
+
+
+### Funções
+
+Como você deve ter notado mencionamos algumas vezes a palavra função/funções, mas o que é isso? Podemos pensar cada função como uma __ação__ a ser realizada, como por exemplo, transforme os dados em fatores (`factor()`) ou realize a média (`mean()`) de um conjunto de dados númericos. Ou seja, uma função é um conjunto de instruções que realizam uma tarefa especifica, podendo carregar com parâmetros a serem preenchidos pelo usuário ou não.
+
+Vamos pensar na função `strsplit()`! Ok, se você nunca programou antes talvez não saiba o que ela faz... Para isso existe o que nós chamamos de documentação, um local que nos explica qual é a "ação" que a função realiza e os parâmetros que ela aceita.
+
+```{r}
+# Para ver a documentação de uma função
+?strsplit()
+```
+
+Se observarmos o tópico "Usage" veremos o seguinte:
+  
+  `strsplit(x, split, fixed = FALSE, perl = FALSE, useBytes = FALSE)`
+
+O `x` e o `split` são argumentos que devem ser obrigatóriamente preenchidos, o restante já esta preenchido por padrão (também falamos default). Vamos ver um exemplo,
+
+```{r}
+strsplit(x = "Aprender sobre funcoes pode ser divertido", split = " ")
+```
+
+Como os argumentos possuem posições não precisamos necessariamente ficar escrevendo `x = `  ou `split = `.
+
+```{r}
+strsplit("Aprender sobre funcoes pode ser divertido", " ")
+```
+
+Se você tiver mais interesse em saber sobre funções [clique aqui!](https://www.datacamp.com/community/tutorials/functions-in-r-a-tutorial#what)
+                                                                   
+                                                                   ### Pacotes
+                                                                   
+                                                                   Segundo a definição do livro R Packages, escrito por Hadley Wickham, um pacote é uma unidade fundamental de compartilhamento de códigos, dados, documentação e testes. Em outras palavras, os pacotes são coleções de códigos (funções) e dados desenvolvidos pela comunidade.
+                                                                   
+                                                                   Estes pacotes ficam localizados no que chamamos de repositório. O principal repositório recebe o nome de **C**omprehensive **R** **A**rchive **N**etwork, o também chamado, CRAN. Mas existem outros também, como o Github, no qual a forma de obter os pacotes muda. Mas como instalamos um pacote no R? A resposta é simples, utilizamos uma função chamada `install.packages()` em que o argumento principal é o nome do pacote que queremos instalar.
+                                                                   
+                                                                   Uma peculiaridade desta função é que por padrão ela instala os pacotes que estão no CRAN, como por exemplo, vamos instalar um pacote chamado "dplyr"
+                                                                   
+                                                                   ```{r}
+                                                                   install.packages("dplyr")
+                                                                   ```
+                                                                   
+                                                                   Após instalarmos o pacote, devemos habilitá-lo com uma função chamada `library()`
+                                                                   
+                                                                   ```{r}
+                                                                   library(dplyr)
+                                                                   ```
+
+
+                                                                   Caso o pacote não esteja no CRAN, mas sim no Github, devemos instalar o pacote com o auxilio de uma função chamada `install_github()` do pacote `devtools`.
+                                                                   
+                                                                   ```{r}
+                                                                   install.packages("devtools")
+                                                                   
+                                                                   library(devtools)
+                                                                   
+                                                                   install_github("abjur/abjutils")
+                                                                   
+                                                                   library(abjutils)
+                                                                   ```
 
 
 ## Controladores de Fluxo
@@ -486,33 +617,5 @@ print(tabela)
 ```
 
 # Exercícios
-
-## Parte A: Tipos de dados
-
-Marque verdadeiro ou falso. Caso verdadeiro, informe o tipo de dado:
-
-Obs: Caso apareça "+" no seu console ao testar as afirmações, basta apertar "Esc"
-
-1. `33,5`
-
-2. `"Olá mundo"`
-
-3. `"O 'R' é uma linguagem legal"`
-
-4. `"O 'R é uma linguagem legal"`
-
-5. `"O 'R é uma linguagem legal'`
-
-6. `400e+10`
-
-7. `factor("oi", levels = c("oi", "tchau"))`
-
-8. `true`
-
-9. `False`
-
-## Parte B: Estrutura de dados
-
-## Parte C: Controladores de fluxo
 
 
