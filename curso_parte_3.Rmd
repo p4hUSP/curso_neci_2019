@@ -40,6 +40,7 @@ Como nosso foco é a manipulação de dados iremos trabalhar com os seguintes pa
 Vamos começar habilitando o `tidyverse` e importando as tabelas `votacao_candidato.csv` e `candidatos.csv` para o ambiente do RStudio.
 
 ```{r}
+options(scipen=999) # Rodem isso antes, para nao termos problems com notacao cientifica
 library(tidyverse)
 
 votacao_candidato <- read_delim("data/votacao_candidato.gz", delim = ",") # Escolhi o read_delim para poder definir o separador
@@ -251,24 +252,40 @@ tabela_pref_40  <- rename(tabela_pref_40, Quantidade = n)
 
 ### `group_by()` e `summarise()`
 
-```{r}
-temp <- group_by(pref_sup_SP, CATEGORIA_IDADE)
-
-summarise(temp, Quantidade = n())
-```
+O `group_by()` e `summarise()` são funções que trabalham, na maioria das vezes, juntas. Eles servem para sumarizar os dados de acordo com grupos, ou seja, a contagem que haviamos feito com o `count()` pode ser reproduzida aqui da seguinte forma:
 
 ```{r}
-temp <- group_by(pref_sup_SP, CATEGORIA_IDADE, DS_COR_RACA)
+temp_1 <- group_by(pref_sup_SP, CATEGORIA_IDADE)
 
-summarise(temp, Quantidade = n())
+summarise(temp_1, Quantidade = n())
 ```
+
+O objeto `temp_1` é uma tabela agrupada! Visualmente ela parece normal, porém qualquer operação feita nela será realizada de acordo com os grupos nos quais ela encontrou, que neste caso é: MAIOR QUE 40 e MENOR QUE 40.
+
+Quando utilizamos o summarise, iremos agrupar as categorias em torno de uma estatística, no caso, a contagem. Para fazer isso, utilizamos a função `n()`, uma função utilizada para contar obervações. Caso a variável que fossemos sumarizar fosse númerica, poderiamos utilizar a média (`mean()`), mediana (`median()`) e assim por diante.
+
+Portanto, a vantagem do `group_by()` e `summarise()` é que conseguimos sumarizar com outras estatísticas além da contagem. Vejamos o exemplo abaixo. Estamos agrupando pela categoria de idade e a cor/raça do candidato. Após isto, estamos contando o número de observações que apresentam estas categorias.
+
+```{r}
+temp_2 <- group_by(pref_sup_SP, CATEGORIA_IDADE, DS_COR_RACA)
+
+summarise(temp_2, Quantidade = n())
+```
+
+Com isso podemos verificar que existem mais candidatos brancos entre os maiores e menores de 40 anos; e que não existe candidato indígena com menos de 40 anos, por exemplo.
 
 ### `%>%`
+
+Até então, vimos os principais verbos do `dplyr` e conseguimos verificar que maior parte dos candidatos à prefeitura no Estado de São Paulo, que pertence à coligações e tem ensino superior completo e incompleto tem mais de 40 anos de idade. Porém, para fazer isso tivemos que criar diversas linhas de código, salvando várias vezes as saídas dentro de um mesmo objeto, algo que é muito trabalhoso.
+
+Também poderíamos fazer igual ao código abaixo, porém a interpretação desse código se torna mais complexa, uma vez que as ações são realizadas de dentro pra fora.
 
 ```{r}
 rename(count(mutate(select(filter(candidatos, SG_UF == "SP", DS_CARGO == "PREFEITO", DS_GRAU_INSTRUCAO %in% c("SUPERIOR COMPLETO", "SUPERIOR INCOMPLETO"), TP_AGREMIACAO != "PARTIDO ISOLADO"), -DT_GERACAO, -HH_GERACAO, -NR_PROCESSO), DT_NASCIMENTO_ANO = as.numeric(DT_NASCIMENTO_ANO),
        IDADE_ATUAL = 2019 - DT_NASCIMENTO_ANO, CATEGORIA_IDADE = ifelse(IDADE_ATUAL <= 40, "MENOR QUE 40", "MAIOR QUE 40")), CATEGORIA_IDADE), Quantidade = n)
 ```
+
+Para solucionar este problema os desenvolvedores do pacote incluiram um operador chamado de pipe (`%>%`). Basicamente ele permite que possamos contruir códigos de forma linear, como podemos notar abaixo!
 
 ```{r}
 candidatos %>% 
@@ -280,12 +297,20 @@ candidatos %>%
   count(CATEGORIA_IDADE) %>% 
   rename(Quantidade = n)
 ```
- 
-## Variações dos Verbos
 
-### *_if()
+Agora podemos interpretar o código acima da seguinte maneira:
 
-### *_at()
+> Pegamos a nossa base de dados "candidatos", aplicamos um FILTER, em seguida o SELECT para removermos colunas que não queremos. Depois alteramos e criamos variáveis com MUTATE; contamos o número de observações de uma variável com o COUNT e por fim, mudamos o nome de uma variável com RENAME.
+
+Você pode estar pensando: Mas que benefício eu tenho com o pipe? Ele otimiza o nosso tempo escrevendo o código, já que não precisamos escrever os objetos para sobrescrever às saídas e também diminui a complexidade do código.
+
+Caso tenha interesse em saber mais sobre as origens do `%>%` [Clique aqui!](https://www.datacamp.com/community/tutorials/pipe-r-tutorial#intro)
+
+Em resumo, o pipe, quando utilizado com `dplyr` tem a seguinte estrutura:
+
+1. Banco de dados
+
+2. Operações de manipulação
 
 ## Joins
 
@@ -366,6 +391,55 @@ anti_join(tbl_votos, tbl_empresas, by = c("ID" = "ID_CANDIDATO"))
 anti_join(tbl_empresas, tbl_votos, by = c("ID_CANDIDATO" = "ID")) # lembre-se de alterar a ordem do by
 ```
 
-# lubridate
+# Wrap-up
 
-# stringr
+Vamos juntar tudo o que aprendemos e tirar alguma informação dos dados? Quantos votos em média vereadorxs recebem por município e genêro?
+
+A primeira tarefa que fazemos é entender como os dados estão organizados. Para isso utilizamos uma função que chama `glimpse()`
+
+```{r}
+glimpse(candidatos)
+```
+
+```{r}
+glimpse(votacao_candidato)
+```
+
+Esta função nos permite ver os tipos de dados que estamos lidando, o número de observações e variáveis. Se nós percebermos bem, existe uma variável que liga os dois dataframes, a variavel SQ_CANDIDATO! Não se esqueçam dela, pois ela é o identificador das tabelas.
+
+Após isto, vamos calcular os votos totais da tabela "votacao_candidato", filtrando e agrupando os dados de interesse.
+
+```{r}
+# Criando uma tabela com votos totais
+## Usaremos para conectar na variavel de candidatos
+votos_totais_sq <- votacao_candidato %>% 
+  filter(DESC_SIT_CANDIDATO == "DEFERIDO", DESCRICAO_CARGO == "VEREADOR",
+         DESC_SIT_CAND_TOT %in% c("ELEITO POR MÉDIA", "ELEITO POR QP")) %>% 
+  group_by(SQ_CANDIDATO) %>% 
+  summarise(TOTAL_VOTOS = sum(TOTAL_VOTOS))
+```
+
+Feito isso, vamos arrumar a tabela "candidatos". Perceba que usamos uma função chamada `distinct()`, ela é utilizada para remover dados duplicados do dataframe de acordo com alguma(s) variável e seu argumento `.keep_all = T` significa que queremos manter as outras variáveis do banco de dados.
+
+```{r}
+# Na tabela candidatos temos casos duplicados, temos que utilizar o distintic
+candidatos_2 <- candidatos %>% 
+  filter(DS_CARGO == "VEREADOR") %>% 
+  distinct(SQ_CANDIDATO, .keep_all = T) %>% # o argumento .keep_all quando verdadeiro mantem todas as variaveis
+  select(SQ_CANDIDATO, NM_CANDIDATO, SG_UF, NM_UE, DS_CARGO, SG_PARTIDO, DS_NACIONALIDADE, DT_NASCIMENTO, NR_IDADE_DATA_POSSE, DS_GENERO, DS_GRAU_INSTRUCAO, DS_COR_RACA, DS_OCUPACAO)
+```
+
+Agora podemos juntar as duas tabelas pela variável "SQ_CANDIDATO"
+
+```{r}
+join <- left_join(votos_totais_sq, candidatos_2, by = "SQ_CANDIDATO")
+```
+
+Por fim, vamos sumarizar a nossa tabela pela unidade federativa e gênero!
+
+```{r}
+join %>% 
+  group_by(SG_UF, DS_GENERO) %>% 
+  summarise(media_votos = mean(TOTAL_VOTOS))
+```
+
