@@ -241,9 +241,33 @@ Portanto, podemos notar que existem mais candidatos maiores de 40 anos do que o 
 
 ### `rename()`
 
+Se quisermos renomear o nome das variáveis temos que utilizar o `rename()` que tem o seguinte padrão:
+
+`rename(bando_de_dados, nome_novo = nome_antigo)`
+
+```{r}
+tabela_pref_40  <- rename(tabela_pref_40, Quantidade = n)
+```
+
 ### `group_by()` e `summarise()`
 
 ### `%>%`
+
+```{r}
+rename(count(mutate(select(filter(candidatos, SG_UF == "SP", DS_CARGO == "PREFEITO", DS_GRAU_INSTRUCAO %in% c("SUPERIOR COMPLETO", "SUPERIOR INCOMPLETO"), TP_AGREMIACAO != "PARTIDO ISOLADO"), -DT_GERACAO, -HH_GERACAO, -NR_PROCESSO), DT_NASCIMENTO_ANO = as.numeric(DT_NASCIMENTO_ANO),
+       IDADE_ATUAL = 2019 - DT_NASCIMENTO_ANO, CATEGORIA_IDADE = ifelse(IDADE_ATUAL <= 40, "MENOR QUE 40", "MAIOR QUE 40")), CATEGORIA_IDADE), Quantidade = n)
+```
+
+```{r}
+candidatos %>% 
+  filter(SG_UF == "SP", DS_CARGO == "PREFEITO", DS_GRAU_INSTRUCAO %in% c("SUPERIOR COMPLETO", "SUPERIOR INCOMPLETO"), TP_AGREMIACAO != "PARTIDO ISOLADO") %>% 
+  select(-DT_GERACAO, -HH_GERACAO, -NR_PROCESSO) %>% 
+  mutate(DT_NASCIMENTO_ANO = as.numeric(DT_NASCIMENTO_ANO),
+         IDADE_ATUAL = 2019 - DT_NASCIMENTO_ANO,
+         CATEGORIA_IDADE = ifelse(IDADE_ATUAL <= 40, "MENOR QUE 40", "MAIOR QUE 40")) %>% 
+  count(CATEGORIA_IDADE) %>% 
+  rename(Quantidade = n)
+```
 
 ## Variações dos Verbos
 
