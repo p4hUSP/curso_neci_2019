@@ -618,4 +618,62 @@ print(tabela)
 
 # Exercícios
 
+## Parte A: Tipos de dados
 
+### Exercicio 1
+
+Execute os códigos abaixo e verifique se são dados válidos em R. Caso verdadeiro, informe o tipo de dado:
+
+Obs: Caso apareça "+" no seu console ao testar as afirmações, basta apertar "Esc"
+
+1. `33,5`
+
+2. `"Olá mundo"`
+
+3. `"O 'R' é uma linguagem legal"`
+
+4. `"O 'R é uma linguagem legal"`
+
+5. `"O 'R é uma linguagem legal'`
+
+6. `400e+10`
+
+7. `factor("oi", levels = c("oi", "tchau"))`
+
+8. `true`
+
+9. `False`
+
+### Exercicio 2
+
+1. Altere o valor de v_numero para 42
+`v_numero <- 42.5`
+
+2. Altere o valor de v_caractere para "universo"
+`v_caractere <- "algum texto"`
+
+3. Altere o valor de v_logical para FALSE
+`v_logical <- TRUE`
+
+
+## Parte B: Estrutura de dados
+
+### Exercicio 1
+
+1. Crie um vetor chamado candidatos com os nomes dos cadidatos presidenciais de 2018 pela ordem de votos do primeiro turno:  `'Jair Bolsonaro'`, `'Fernando Haddad'`, `'Ciro Gomes'` e `'Geraldo Alckmin'` (nesta ordem).
+
+2. Em seguida crie outro vetor chamado votos com os números de votos dos quatro primeiros colocados para a eleição presidencial de 2018:  49.276.990, 31.342.005, 13.344.366 e 5.096.349.
+
+3. A partir desses dois vetores crie um data frame que apresente os nomes dos candidatos e os números de votos desses candidatos no primeiro turno.
+
+4. Em seguida crie mais uma coluna para esse data frame com o partido político que o candidato se candidatou: Jair Bolsonaro - PSL, Fernando Haddad - PT, Ciro Gomes - PDT e Geraldo Alckmin - PSDB.
+
+5. Utilizando a indexação, obtenha o número de votos e o partido dos candidatos Fernando Haddad e Ciro Gomes e armazene em vetores diferentes.
+
+## Parte C: Controladores de fluxo
+
+### Exercicio 1
+
+1. Execute o código em data/eleicoes_sp.R para criar o data frame para o exercício. O data frame é o resultado da eleição do 1º turdo para governador do estado de São Paulo.
+2. Utilizando o laço FOR e o condicional IF/ELSE, crie uma coluna no data frame com o nome porcentagem de votos em que indique a porcentagem de votos obtida por cada candidato.
+4. Crie outra coluna com o nome resultado. O valor dessa coluna deve assumir o valor `"Eleito"` caso o candidato obteve mais de 50% dos votos. Caso nenhum candidato obteve essa porcentagem, os dois candidatos com maior porcentagem de votos devem ter a coluna com o valor `"2º turno"` e os demais como `"Não Eleito"`.
