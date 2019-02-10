@@ -280,7 +280,7 @@ candidatos %>%
   count(CATEGORIA_IDADE) %>% 
   rename(Quantidade = n)
 ```
-
+ 
 ## Variações dos Verbos
 
 ### *_if()
