@@ -1,0 +1,77 @@
+---
+title: "Exercicios da Parte 3"
+author: "Kaue Oliveira Almeida"
+date: "10 de fevereiro de 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercicios
+
+1) Importe o CSV data/perfil_2010_spr.csv
+```{r}
+perfil_eleitorado_2010 <- read.csv("~/USP/P4H/curso_neci_2019/data/perfil_eleitorado_2010.txt", header=FALSE, sep=";")
+```
+
+
+2) Renomeie as colunas de acordo com a descrição do PDF data/LEIAME_perfil_eleitorado_2010.pdf
+```{r}
+perfil_eleitorado_2010 <- perfil_eleitorado_2010 %>% 
+  rename(PERIODO = V1, UF = V2, MUNICIPIO = V3, COD_MUNICIPIO_TSE = V4, NR_ZONA = V5, SEXO = V6, FAIXA_ETARIA = V7, GRAU_DE_ESCOLARIDADE = V8, QTD_ELEITORES_NO_PERFIL = V9)
+```
+
+
+3) Agrupe os dados e filtre de acordo e imprima a quantidade de eleitores do sexo feminino por UF.
+```{r}
+temp <- perfil_eleitorado_2010 %>% 
+  group_by(UF)
+temp %>% 
+  filter(SEXO == "FEMININO") %>% 
+  summarise(QTD_ELEITORES_NO_PERFIL = n())
+```
+
+
+4) Crie uma nova coluna "Alfabetizado" e preencha de acordo com TRUE ou FALSE
+```{r}
+temp2 <- perfil_eleitorado_2010 %>% 
+  mutate("ALFABETIZADO" = ifelse(GRAU_DE_ESCOLARIDADE != "ANALFABETO", "SIM", "NÃO")) 
+```
+
+
+5) Imprima a quantidade de eleitores alfabetizados e não alfabetizados por estado 
+```{r}
+temp2_1 <- temp2 %>% 
+  group_by(UF)
+
+temp2_1 %>% 
+  count(ALFABETIZADO)
+```
+
+
+
+
+5) Importe a planilha data/perfil_2010_spr.csv. Utilize ocale = locale(encoding = "ISO-8859-1")).
+```{r}
+perfil_2010_spr <- read_csv("data/perfil_2010_spr.csv", 
+    locale = locale(encoding = "ISO-8859-1"))
+```
+
+
+
+6) Verifique que o data frame possui os mesmos valores, porém, aparentemente, foi utilizado a função spread(). Tente reproduzir o mesmo resultado com o data frame anterior.
+```{r}
+temp_spread <- perfil_eleitorado_2010 %>% 
+  spread(GRAU_DE_ESCOLARIDADE, QTD_ELEITORES_NO_PERFIL)
+```
+
+
+7) Agora tente reverter utilizando a função gather(). Agrupe as colunas correspondentes ao grau de escolaridade.
+
+```{r}
+temp_gather <- perfil_2010_spr %>% 
+    gather(key = "GRAU DE ESCOLARIDADE", value = "QTD_ELEITORES_NO_PERFIL", 8:16)
+```
+
