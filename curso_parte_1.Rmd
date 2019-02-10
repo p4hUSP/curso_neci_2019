@@ -26,6 +26,24 @@ A última parte vai apresentar técnicas de manipulação de dados no R, algo qu
 
 <center> Vamos lá? </center>
 
+## Parte 1 - overview
+
+Explorar o ambiente R
+Objetos e atribuições
+Tipos de dados
+Estruturas de dados
+Funções
+Pacotes
+Controle de fluxo
+
+## Primeiro, vamos comparar com os softwares que conhecemos
+
+Abrir ddrevisited_data_v1.xls
+Abrir ddrevisited_data_v1.aacdb
+Abrir ddrevisited_data_v1.dta
+
+Onde estão as variáveis? E as observações?
+
 # O que é o R e o RStudio?
 
 ## Linguagem de programação R
@@ -58,6 +76,30 @@ knitr::include_graphics("imgs/rstudio_print.png")
     
 Podemos então começar a escrever nossas primeiras linhas de código!
 
+# Abrindo um script
+
+1- Podemos começar um novo script do zero
+
+2 - Ou podemos abrir um script que já foi trabalhado
+
+File →  Open file  → Aula1.R       
+
+Atenção à extensão .R
+
+Num script tem linhas de comando e também linhas de comentários.
+Para marcarmos comentários basta colocarmos # 
+Dessa forma, o R não executará o que está escrito depois das aspas
+
+# Algumas regras de boa conduta
+
+É sempre preferível trabalhar com scripts do que com diretamente com no console. Dessa forma salvamos cada passo de modificação do banco de dados.
+
+Quando trabalhamos com dados que não coletamos, o ideal é realizar todas as alterações documentadas no script mantendo o documento original intacto.
+
+Isso é importante para a replicabilidade de nossos trabalhos. Queremos que nossos resultados sejam encontrados por todas as pesquisadoras encontrem os mesmos resultados.    
+
+A documentação do código também é essencial a compreensão dos comandos. Por isso os comentários são super úteis e importantes. 
+
 # Nossas primeiras linhas de código
 
 Uma das funcionalidades mais básicas do __R__ é realização de operações matemáticas. Se estamos digitando os comandos em um script basta colocarmos o cursor do mouse na linha do código e apertar `Ctrl + Enter` e o resultado sairá no Console, assim como já havíamos mencionado.
@@ -71,8 +113,38 @@ Uma das funcionalidades mais básicas do __R__ é realização de operações ma
 
 5 / 2 # Divisão
 ```
+# Objetos e atribuições I
 
-As saídas (outputs) das operações acima nos permitem introduzir quais são os tipos de dados que podemos trabalhar no __R__, um deles como podemos notar são os números.
+“To understand computations in R, two slogans are helpful:
+• Everything that exists is an object.
+• Everything that happens is a function call."
+— John Chambers
+
+Dados são guardados dentro de objetos.
+Objetos possuem diferentes formas de estruturas os dados. Podemos ter objetos de diferentes tipos:
+Vetores
+Listas 
+Dataframes
+Objetos podem conter  dados de diferentes tipos, como:
+Números
+Strings
+Fatores
+
+#### Atribuindo valores à variáveis (`<-`)
+
+Ocorre que os códigos digitados até aqui apenas são executados no console, o que significa que não estamos salvando estes objetos na memória do computador, o que não nos possibilita manipular as estruturas de uma forma mais fácil. 
+
+```{r}
+
+1
+a <- 1
+a
+b <- (“Hello, world”)
+b
+dado <- c(1,2,3,4,5,6)
+dado
+
+```
 
 ## Tipos de dados
 
@@ -198,66 +270,32 @@ is.na(NA)
 is.na(99)
 ```
 
-## O que são pacotes e funções?
+# Exercícios
 
-### Funções
+## Parte A: Tipos de dados
 
-Como você deve ter notado mencionamos algumas vezes a palavra função/funções, mas o que é isso? Podemos pensar cada função como uma __ação__ a ser realizada, como por exemplo, transforme os dados em fatores (`factor()`) ou realize a média (`mean()`) de um conjunto de dados númericos. Ou seja, uma função é um conjunto de instruções que realizam uma tarefa especifica, podendo carregar com parâmetros a serem preenchidos pelo usuário ou não.
+Marque verdadeiro ou falso. Caso verdadeiro, informe o tipo de dado:
 
-Vamos pensar na função `strsplit()`! Ok, se você nunca programou antes talvez não saiba o que ela faz... Para isso existe o que nós chamamos de documentação, um local que nos explica qual é a "ação" que a função realiza e os parâmetros que ela aceita.
+Obs: Caso apareça "+" no seu console ao testar as afirmações, basta apertar "Esc"
 
-```{r}
-# Para ver a documentação de uma função
-?strsplit()
-```
+1. `33,5`
 
-Se observarmos o tópico "Usage" veremos o seguinte:
+2. `"Olá mundo"`
 
-`strsplit(x, split, fixed = FALSE, perl = FALSE, useBytes = FALSE)`
+3. `"O 'R' é uma linguagem legal"`
 
-O `x` e o `split` são argumentos que devem ser obrigatóriamente preenchidos, o restante já esta preenchido por padrão (também falamos default). Vamos ver um exemplo,
+4. `"O 'R é uma linguagem legal"`
 
-```{r}
-strsplit(x = "Aprender sobre funcoes pode ser divertido", split = " ")
-```
+5. `"O 'R é uma linguagem legal'`
 
-Como os argumentos possuem posições não precisamos necessariamente ficar escrevendo `x = `  ou `split = `.
+6. `400e+10`
 
-```{r}
-strsplit("Aprender sobre funcoes pode ser divertido", " ")
-```
+7. `factor("oi", levels = c("oi", "tchau"))`
 
-Se você tiver mais interesse em saber sobre funções [clique aqui!](https://www.datacamp.com/community/tutorials/functions-in-r-a-tutorial#what)
+8. `true`
 
-### Pacotes
+9. `False`
 
-Segundo a definição do livro R Packages, escrito por Hadley Wickham, um pacote é uma unidade fundamental de compartilhamento de códigos, dados, documentação e testes. Em outras palavras, os pacotes são coleções de códigos (funções) e dados desenvolvidos pela comunidade.
-
-Estes pacotes ficam localizados no que chamamos de repositório. O principal repositório recebe o nome de **C**omprehensive **R** **A**rchive **N**etwork, o também chamado, CRAN. Mas existem outros também, como o Github, no qual a forma de obter os pacotes muda. Mas como instalamos um pacote no R? A resposta é simples, utilizamos uma função chamada `install.packages()` em que o argumento principal é o nome do pacote que queremos instalar.
-
-Uma peculiaridade desta função é que por padrão ela instala os pacotes que estão no CRAN, como por exemplo, vamos instalar um pacote chamado "dplyr"
-
-```{r}
-install.packages("dplyr")
-```
-
-Após instalarmos o pacote, devemos habilitá-lo com uma função chamada `library()`
-
-```{r}
-library(dplyr)
-```
-
-Caso o pacote não esteja no CRAN, mas sim no Github, devemos instalar o pacote com o auxilio de uma função chamada `install_github()` do pacote `devtools`.
-
-```{r}
-install.packages("devtools")
-
-library(devtools)
-
-install_github("abjur/abjutils")
-
-library(abjutils)
-```
 
 ## Estrutura de dados
 
@@ -285,21 +323,9 @@ c(TRUE, FALSE, FALSE, FALSE) # vice do mesmo partido
 
 Perceba então que para construir um vetor basta colocarmos os valores dentro de `c()`.
 
-#### Atribuindo valores à variáveis (`<-`)
 
-Ocorre que os códigos digitados até aqui apenas são executados no console, o que significa que não estamos salvando estes objetos na memória do computador, o que não nos possibilita manipular as estruturas de uma forma mais fácil. 
+### Indexando vetores
 
-```{r}
-presidente_eleito  <- c("Dutra", "Vargas", "JK", "Janio Quadros") # presidente eleito
-
-porcentagem <- c(55.39, 48.73, 35.68, 48.26) # porcentagem 
-
-vitoria_uf <- c(23, 17, 15, 16) # vitoria em quantas UF
-
-vice_igual_presid <- c(TRUE, FALSE, FALSE, FALSE) # vice do mesmo partido
-```
-
-#### Indexando
 
 Dado que criamos objetos, podemos acessar os valores específicos a partir da posição dentro do vetor, como por exemplo, se quisermos acessar o primeiro elemento do `presidente_eleito`, isto é, "Dutra". Para isso basta colocarmos `[]` após o vetor e dentro dele a posição de interesse.
 
@@ -314,6 +340,7 @@ porcentagem[c(1,2)]
 
 vitoria_uf[3:4] # Equivalente: vitoria_uf[c(3,4)]
 ```
+
 
 ### Listas
 
@@ -347,13 +374,31 @@ lista[[1]][1]
 lista[[3]][[1]] # Obtendo o elemento da lista dentro de outra lista
 ```
 
-### Data frames
+### Dataframes
 
 Sabe a planilha do excel, isto é, uma tabela? No R, ela é chamada de data frame! Assim como as listas, data frames são estruturas de dados heterogêneas, sendo entendidos também como um conjunto de vetores nos quais cada elemento é uma observação. 
 
 ```{r}
 tabela <- data.frame(presidente_eleito = c("Dutra", "Vargas", "JK", "Janio Quadros"), porcentagem = c(55.39, 48.73, 35.68, 48.26), vitoria_uf = c(23, 17, 15, 16), vice_igual_presid = c(TRUE, FALSE, FALSE, FALSE))
+
 ```
+
+## Dataframes
+
+Agora que criamos nosso primeiro dataframe podemos pensar em mais diferenças em relação à manipulação de dados em outros softwares.
+No R, não existe a possibilidade de manipulararmos os dados direto do dataframe. Por isso, usamos funções (que logo mais veremos com mais calma) para conhecer melhor o dataframe.
+
+View(tabela) # mostra o banco no console
+head (tabela) # mostra as seis primeiras linhas do banco no console
+str(tabela)# mostra a estrutura da tabela
+names(tabela) # mostra o nome das variáveis
+
+nrow(tabela) # nº de linhas
+ncol(tabela) #nº de colunas
+dim(tabela) # dimensões
+
+
+
 
 #### Indexando 
 
@@ -388,6 +433,85 @@ tabela$presidente_eleito
 
 tabela$vice_igual_presid[1]
 ```
+
+## Exercício 1
+
+1. Crie um dataframe com o nome, idade e filme preferido dos seus colegas de turma.
+Faça um script que documente o passo a passo da criação do dta frame
+2. Crie uma lista composta por 3 elementos.
+Faça um script que documente o passo a passo da criação do dta frame
+Como podemos saber o conteúdo do segundo elemento da lista. Utilze a indexação
+
+## Exercício 2
+
+No R temos, bancos para fins didáticos. Para utilizá-los basta usar a função data. Para esse exercícios utilizaremos o banco mtcars
+data(mtcars)
+1. Visualize o banco. Do que se trata?
+2. Quais são suas variáveis?
+3. E suas dimensões?
+4. Selecione as 10 primeiras observações
+
+
+### Funções
+
+Como você deve ter notado mencionamos algumas vezes a palavra função/funções, mas o que é isso? Podemos pensar cada função como uma __ação__ a ser realizada, como por exemplo, transforme os dados em fatores (`factor()`) ou realize a média (`mean()`) de um conjunto de dados númericos. Ou seja, uma função é um conjunto de instruções que realizam uma tarefa especifica, podendo carregar com parâmetros a serem preenchidos pelo usuário ou não.
+
+Vamos pensar na função `strsplit()`! Ok, se você nunca programou antes talvez não saiba o que ela faz... Para isso existe o que nós chamamos de documentação, um local que nos explica qual é a "ação" que a função realiza e os parâmetros que ela aceita.
+
+```{r}
+# Para ver a documentação de uma função
+?strsplit()
+```
+
+Se observarmos o tópico "Usage" veremos o seguinte:
+  
+  `strsplit(x, split, fixed = FALSE, perl = FALSE, useBytes = FALSE)`
+
+O `x` e o `split` são argumentos que devem ser obrigatóriamente preenchidos, o restante já esta preenchido por padrão (também falamos default). Vamos ver um exemplo,
+
+```{r}
+strsplit(x = "Aprender sobre funcoes pode ser divertido", split = " ")
+```
+
+Como os argumentos possuem posições não precisamos necessariamente ficar escrevendo `x = `  ou `split = `.
+
+```{r}
+strsplit("Aprender sobre funcoes pode ser divertido", " ")
+```
+
+Se você tiver mais interesse em saber sobre funções [clique aqui!](https://www.datacamp.com/community/tutorials/functions-in-r-a-tutorial#what)
+                                                                   
+                                                                   ### Pacotes
+                                                                   
+                                                                   Segundo a definição do livro R Packages, escrito por Hadley Wickham, um pacote é uma unidade fundamental de compartilhamento de códigos, dados, documentação e testes. Em outras palavras, os pacotes são coleções de códigos (funções) e dados desenvolvidos pela comunidade.
+                                                                   
+                                                                   Estes pacotes ficam localizados no que chamamos de repositório. O principal repositório recebe o nome de **C**omprehensive **R** **A**rchive **N**etwork, o também chamado, CRAN. Mas existem outros também, como o Github, no qual a forma de obter os pacotes muda. Mas como instalamos um pacote no R? A resposta é simples, utilizamos uma função chamada `install.packages()` em que o argumento principal é o nome do pacote que queremos instalar.
+                                                                   
+                                                                   Uma peculiaridade desta função é que por padrão ela instala os pacotes que estão no CRAN, como por exemplo, vamos instalar um pacote chamado "dplyr"
+                                                                   
+                                                                   ```{r}
+                                                                   install.packages("dplyr")
+                                                                   ```
+                                                                   
+                                                                   Após instalarmos o pacote, devemos habilitá-lo com uma função chamada `library()`
+                                                                   
+                                                                   ```{r}
+                                                                   library(dplyr)
+                                                                   ```
+
+
+                                                                   Caso o pacote não esteja no CRAN, mas sim no Github, devemos instalar o pacote com o auxilio de uma função chamada `install_github()` do pacote `devtools`.
+                                                                   
+                                                                   ```{r}
+                                                                   install.packages("devtools")
+                                                                   
+                                                                   library(devtools)
+                                                                   
+                                                                   install_github("abjur/abjutils")
+                                                                   
+                                                                   library(abjutils)
+                                                                   ```
+
 
 ## Controladores de Fluxo
 
@@ -553,5 +677,3 @@ Obs: Caso apareça "+" no seu console ao testar as afirmações, basta apertar "
 1. Execute o código em data/eleicoes_sp.R para criar o data frame para o exercício. O data frame é o resultado da eleição do 1º turdo para governador do estado de São Paulo.
 2. Utilizando o laço FOR e o condicional IF/ELSE, crie uma coluna no data frame com o nome porcentagem de votos em que indique a porcentagem de votos obtida por cada candidato.
 4. Crie outra coluna com o nome resultado. O valor dessa coluna deve assumir o valor `"Eleito"` caso o candidato obteve mais de 50% dos votos. Caso nenhum candidato obteve essa porcentagem, os dois candidatos com maior porcentagem de votos devem ter a coluna com o valor `"2º turno"` e os demais como `"Não Eleito"`.
-
-
