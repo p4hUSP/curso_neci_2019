@@ -251,6 +251,18 @@ tabela_pref_40  <- rename(tabela_pref_40, Quantidade = n)
 
 ### `group_by()` e `summarise()`
 
+```{r}
+temp <- group_by(pref_sup_SP, CATEGORIA_IDADE)
+
+summarise(temp, Quantidade = n())
+```
+
+```{r}
+temp <- group_by(pref_sup_SP, CATEGORIA_IDADE, DS_COR_RACA)
+
+summarise(temp, Quantidade = n())
+```
+
 ### `%>%`
 
 ```{r}
