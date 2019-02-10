@@ -79,14 +79,14 @@ candidatos <- unite(candidatos, "SIGLA_NOME_PARTIDO", SG_PARTIDO, NM_PARTIDO, se
 ```
 
 ```{r}
-select(candidatos, "SIGLA_NOME_PARTIDO")
+select(candidatos, "SIGLA_NOME_PARTIDO") # Nao precisa se preocupar com esta funcao agora, veremos mais tarde :)
 ```
 
 ## exemplo com gather e spread
 
-`gather` e `spread` realizam operações opostas.
+`gather()` e `spread()` realizam operações opostas.
 
-`gather` é utilizado para derreter as colunas dos nossos bancos. Vamos imaginar que temos um banco de dados com o a performance dos partidos (total de votos) para cada cargo nas eleições municipais de 2016.
+`gather()` é utilizado para derreter as colunas dos nossos bancos. Vamos imaginar que temos um banco de dados com o a performance dos partidos (total de votos) para cada cargo nas eleições municipais de 2016.
 
 ```{r}
 votos_partidos <- read_csv('data/total_votos_partidos.csv')
@@ -96,7 +96,7 @@ head(votos_partidos)
 
 Tendo em vista os princípios de um banco Tidy, qual o problema desse banco de dados?
 
-As colunas não contêm variáveis, mas __valores__ de variáveis. Qual? O cargo pleiteado pelos candidatos. Para ajustar isso, podemos utilizar a função `gather`. Ela recebe, no primeiro parâmetro, o banco de dados; no segundo, fornecemos as colunas nas quais desejamos realizar a operação. No parâmetro `key`, o nome da variável dos valores, contidos nos cabeçalhos das colunas; no parâmetro `value`, o nome da variável dos valores contidas nas células das colunas. 
+As colunas não contêm variáveis, mas __valores__ de variáveis. Qual? O cargo pleiteado pelos candidatos. Para ajustar isso, podemos utilizar a função `gather()`. Ela recebe, no primeiro parâmetro, o banco de dados; no segundo, fornecemos as colunas nas quais desejamos realizar a operação. No parâmetro `key`, o nome da variável dos valores, contidos nos cabeçalhos das colunas; no parâmetro `value`, o nome da variável dos valores contidas nas células das colunas. 
 
 ```{r}
 votos_partidos_tidy <- gather(votos_partidos, PREFEITO:VEREADOR, key = "DESCRICAO_CARGO", value = "TOTAL_VOTOS")
@@ -104,14 +104,13 @@ votos_partidos_tidy <- gather(votos_partidos, PREFEITO:VEREADOR, key = "DESCRICA
 head(votos_partidos_tidy)
 ```
 
-A função `spread` realiza a operação inversa. Por que iríamos querer fazer isso? Às vezes, pode ser útil para algumas transformações no nosso banco, organizá-lo de uma maneira não Tidy. Além disso, a visualização de tabelas não é muito intuitiva quando o banco está Tidy.
+A função `spread()` realiza a operação inversa. Por que iríamos querer fazer isso? Às vezes, pode ser útil para algumas transformações no nosso banco, organizá-lo de uma maneira não Tidy. Além disso, a visualização de tabelas não é muito intuitiva quando o banco está Tidy.
 
 Para "esticar" um banco, utilizamos a função `spread`. Ela recebe o banco no primeiro parâmetro, o nome da variável que ocupará os cabeçalhos das colunas no segundo e, no terceiro, a variável que ocupará as células.
 
 ```{r}
 spread(votos_partidos_tidy, DESCRICAO_CARGO, TOTAL_VOTOS)
 ```
-
 
 # dplyr e seus verbos
 
@@ -123,24 +122,141 @@ Os principais verbos do dplyr são:
 
 1. `filter`: filtra as linhas de um banco de dados de acordo com uma regra lógica.
 
-2. `mutate`: modifica ou cria colunas de acordo com valores fornecidos.
+2. `select`: seleciona as colunas de interesse.
 
-3. `count`: conta os valores e uma variável.
+3. `mutate`: modifica ou cria colunas de acordo com valores fornecidos.
+
+4. `count`: conta os valores e uma variável.
 
     + Especialmente útil para variáveis categóricas.
     
-4. `group_by` e `summarise`: são funções normalmente utilizadas em conjunto. Elas permitem realizar operações de agregações com o banco de dados e, assim, alterar a nossa unidade de análise. 
+5. `rename`: altera o nome das variáveis (colunas). 
+    
+6. `group_by` e `summarise`: são funções normalmente utilizadas em conjunto. Elas permitem realizar operações de agregações com o banco de dados e, assim, alterar a nossa unidade de análise. 
 
-5. `rename`: altera o nome das variáveis (colunas).
+Porém, não ficaremos apenas nestes verbos, veremos também algumas de suas variações e conheceremos o famoso `%>%` (pipe).
 
-Porém, não ficaremos apenas nestes verbos, veremos algumas de suas variações também e conheceremos o famoso `%>%` (pipe)
+Como vimos, o dplyr é um pacote essencial para manipulação de dados e uma das suas vantagens é que a forma como aplicamos suas funções seguem o seguinte padrão:
+
+`funcao_dplyr(banco_de_dados, argumentos_especificos)`
+
+Ou seja, o primeiro argumento de qualquer um dos verbos é o banco de dados, seguido de argumentos especificos de cada função, como por exemplo, qual variável criar ou filtrar.
+
+### `filter()`
+
+Quando estamos fazendo algumas analises, é comum encontrarmos observações que não nos interessam, como por exemplo, se estou fazendo uma análise sobre candidatos de São Paulo, espero que na minha base de dados tenham apenas candidatos percentences a esta unidade federativa. Para isso utilizamos o `filter()`, vejamos o exemplo abaixo:
+
+```{r}
+filter(candidatos, SG_UF == "SP")
+```
+
+Lembra quando vimos operadores lógicos? Pois bem, eles são muito utilizados no `filter()`. Caso o nosso interesse seja não apenas filtrar os candidados de SP, mas também os candidatos à prefeitura adicionamos o nome da variável, seguido do condicional
+
+```{r}
+filter(candidatos, SG_UF == "SP", DS_CARGO == "PREFEITO")
+```
+
+E se além dos filtros prostos também quisermos os candidatos com grau de instrução igual ao superior completo e incompleto? Para fazer esse filtro podemos utilizar o operador `%in%`! Ele basicamente nos ajuda a filtrar mais de um tipo de categoria de uma variável, uma vez que o operador `==` compara apenas uma categoria.
+
+```{r}
+filter(candidatos, SG_UF == "SP", DS_CARGO == "PREFEITO", DS_GRAU_INSTRUCAO %in% c("SUPERIOR COMPLETO", "SUPERIOR INCOMPLETO")) # perceba a importancia de colocar as categorias que serao filtradas dentro de um vetor
+```
+
+Vamos aproveitar para filtar os casos em que os Prefeitos concorrram em agremiações diferente de partidos isolados e guardar esse dado em um objeto chamado `pref_sup_SP`.
+
+```{r}
+pref_sup_SP <- filter(candidatos, SG_UF == "SP", DS_CARGO == "PREFEITO", DS_GRAU_INSTRUCAO %in% c("SUPERIOR COMPLETO", "SUPERIOR INCOMPLETO"), TP_AGREMIACAO != "PARTIDO ISOLADO")
+```
+
+Agora temos uma outra base de dados para analisarmos. Vamos conhecer então o `select()`.
+
+### `select()`
+
+Em muitas situações nós não trabalhamos com todas as variáveis do bando de dados, para removermos aquelas colunas que nós não iremos utilizar utilizamos a função `select()`, como por exemplo, vamos selecionar apenas o nome dos candidatos e o número deles.
+
+```{r}
+select(pref_sup_SP, NM_CANDIDATO, NR_CANDIDATO)
+```
+
+Percebeu o padrão dessa função? Basicamente é o banco de dados e as variáveis que queremos selecionar. Mas e se quisermos retirar variáveis?
+
+```{r}
+select(pref_sup_SP, -NM_CANDIDATO, -NR_CANDIDATO)
+```
+
+No exemplo acima estamos retirando as variáveis NM_CANDIDATO e NR_CANDIDATO colocando um `-` na frente das variáveis.
+
+Além disso, podemos utilizar funções auxiliares para selecionar as colunas, como por exemplo, selecionar toda variável que começa com NR ou termina com ELEICAO.
+
+```{r}
+# starts_with: selecione as colunas que comecam com NR
+select(pref_sup_SP, starts_with("NR"))
+
+# ends_with: selecione as colunas que terminam com ELEICAO
+select(pref_sup_SP, ends_with("ELEICAO"))
+
+# contains: selecione as colunas que contem a palavra CANDIDATO
+select(pref_sup_SP, contains("CANDIDATO"))
+```
+
+Para darmos continuidade aos outros verbos vamos retirar algumas variáveis
+
+```{r}
+pref_sup_SP <- select(pref_sup_SP, -DT_GERACAO, -HH_GERACAO, -NR_PROCESSO)
+```
+
+### `mutate()`
+
+Caso tenhamos interesse em alterar ou criar uma variável, podemos utilizar o `mutate()`. Vamos aproveitar e:
+
+- Alterar DT_NASCIMENTO_ANO para númerico
+
+- Criar a variável IDADE_ATUAL como a diferença entre 2019 e DT_NASCIMENTO_ANO.
+
+```{r}
+pref_sup_SP <- mutate(pref_sup_SP, 
+       DT_NASCIMENTO_ANO = as.numeric(DT_NASCIMENTO_ANO),
+       IDADE_ATUAL = 2019 - DT_NASCIMENTO_ANO)
+```
+
+Simples não? Além disso, podemos criar variáveis categóricas, como por exemplo, uma variável que identifica se o candidato tem uma idade maior ou menor de 40.
+
+```{r}
+pref_sup_SP <- mutate(pref_sup_SP, CATEGORIA_IDADE = ifelse(IDADE_ATUAL <= 40, "MENOR QUE 40", "MAIOR QUE 40"))
+```
+
+Perceba que para criar essa variável utilizamos uma função chamada `ifelse()`. Basicamente está função é um if que pergunta: Se a IDADE_ATUAL for menor ou igual à 40, classificamos como "MENOR QUE 40", caso negativo, "MAIOR QUE 40".
+
+Agora que criamos a variável "CATEGORIA_IDADE", quantos candidatos tem uma idade menor de 40? Para respondermos isso podemos utilizar a função `count()`
+
+### `count()`
+
+Em uma tradução literal, o `count()` irá contar as categorias de uma variável.
+
+```{r}
+tabela_pref_40 <- count(pref_sup_SP, CATEGORIA_IDADE)
+```
+
+Portanto, podemos notar que existem mais candidatos maiores de 40 anos do que o contrário!
+
+### `rename()`
+
+### `group_by()` e `summarise()`
+
+### `%>%`
+
+## Variações dos Verbos
+
+### *_if()
+
+### *_at()
 
 ## Joins
 
 Muitas vezes precisamos combinar informações de tabelas diferentes para conseguir responder as nossas perguntas, como por exemplo, vejamos as tabelas abaixo:
 
 ```{r}
-
+knitr::include_graphics("imgs/join.png")
 ```
 
 Estas duas tabelas são referentes à votos recebidos por um determinado candidato e a doação relacionada com ele porém, elas são duas tabelas diferentes cuja única fonte de ligação entre elas é a variável "ID". Sendo assim, para conectá-las precisaremos fazer com que exista um match entre ID e aqui entram os diferentes tipos de joins.
