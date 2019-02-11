@@ -310,7 +310,7 @@ is.na(99)</code></pre>
 <p>Queremos trabalhar com dados dos presidentes eleitos de 1945 até 1960, para isso podemos construir vetores que nos informem os nomes, a porcentagem de votos recebida, a quantidade de UF em que ele ganhou e se seu vice era do mesmo partido.</p>
 <pre class="r"><code>c(&quot;Dutra&quot;, &quot;Vargas&quot;, &quot;JK&quot;, &quot;Janio Quadros&quot;) # presidente eleito
 
-c(55.39, 48.73, 35.68, 48.26) # porcentagem 
+c(55.39, 48.73, 35.68, 48.26) # porcentagem
 
 c(23, 17, 15, 16) # vitoria em quantas UF
 
@@ -358,8 +358,14 @@ lista[[3]][[1]] # Obtendo o elemento da lista dentro de outra lista</code></pre>
 <div id="dataframes-1" class="section level2">
 <h2>Dataframes</h2>
 <p>Agora que criamos nosso primeiro dataframe podemos pensar em mais diferenças em relação à manipulação de dados em outros softwares. No R, não existe a possibilidade de manipulararmos os dados direto do dataframe. Por isso, usamos funções (que logo mais veremos com mais calma) para conhecer melhor o dataframe.</p>
-<p>View(tabela) # mostra o banco no console head (tabela) # mostra as seis primeiras linhas do banco no console str(tabela)# mostra a estrutura da tabela names(tabela) # mostra o nome das variáveis</p>
-<p>nrow(tabela) # nº de linhas ncol(tabela) #nº de colunas dim(tabela) # dimensões</p>
+<pre class="r"><code>View(tabela) # mostra o banco no console
+head (tabela) # mostra as seis primeiras linhas do banco no console
+str(tabela)# mostra a estrutura da tabela
+names(tabela) # mostra o nome das variáveis
+
+nrow(tabela) # nº de linhas
+ncol(tabela) #nº de colunas
+dim(tabela) # dimensões</code></pre>
 <div id="indexando-1" class="section level4">
 <h4>Indexando</h4>
 <p>Assim como data frames, a indexação também tem mais de uma dimensão, isto é, primeiro indexamos a linha e depois a coluna, como por exemplo:</p>
@@ -404,39 +410,23 @@ tabela$vice_igual_presid[1]</code></pre>
 <p>Como os argumentos possuem posições não precisamos necessariamente ficar escrevendo <code>x =</code> ou <code>split =</code>.</p>
 <pre class="r"><code>strsplit(&quot;Aprender sobre funcoes pode ser divertido&quot;, &quot; &quot;)</code></pre>
 <p>Se você tiver mais interesse em saber sobre funções <a href="https://www.datacamp.com/community/tutorials/functions-in-r-a-tutorial#what">clique aqui!</a></p>
-<pre><code>                                                               ### Pacotes
-                                                               
-                                                               Segundo a definição do livro R Packages, escrito por Hadley Wickham, um pacote é uma unidade fundamental de compartilhamento de códigos, dados, documentação e testes. Em outras palavras, os pacotes são coleções de códigos (funções) e dados desenvolvidos pela comunidade.
-                                                               
-                                                               Estes pacotes ficam localizados no que chamamos de repositório. O principal repositório recebe o nome de **C**omprehensive **R** **A**rchive **N**etwork, o também chamado, CRAN. Mas existem outros também, como o Github, no qual a forma de obter os pacotes muda. Mas como instalamos um pacote no R? A resposta é simples, utilizamos uma função chamada `install.packages()` em que o argumento principal é o nome do pacote que queremos instalar.
-                                                               
-                                                               Uma peculiaridade desta função é que por padrão ela instala os pacotes que estão no CRAN, como por exemplo, vamos instalar um pacote chamado &quot;dplyr&quot;
-                                                               
-                                                               
-                                                               ```r
-                                                               install.packages(&quot;dplyr&quot;)
-                                                               ```
-                                                               
-                                                               Após instalarmos o pacote, devemos habilitá-lo com uma função chamada `library()`
-                                                               
-                                                               
-                                                               ```r
-                                                               library(dplyr)
-                                                               ```
+</div>
+<div id="pacotes" class="section level3">
+<h3>Pacotes</h3>
+<p>Segundo a definição do livro R Packages, escrito por Hadley Wickham, um pacote é uma unidade fundamental de compartilhamento de códigos, dados, documentação e testes. Em outras palavras, os pacotes são coleções de códigos (funções) e dados desenvolvidos pela comunidade.</p>
+<p>Estes pacotes ficam localizados no que chamamos de repositório. O principal repositório recebe o nome de <strong>C</strong>omprehensive <strong>R</strong> <strong>A</strong>rchive <strong>N</strong>etwork, o também chamado, CRAN. Mas existem outros também, como o Github, no qual a forma de obter os pacotes muda. Mas como instalamos um pacote no R? A resposta é simples, utilizamos uma função chamada <code>install.packages()</code> em que o argumento principal é o nome do pacote que queremos instalar.</p>
+<p>Uma peculiaridade desta função é que por padrão ela instala os pacotes que estão no CRAN, como por exemplo, vamos instalar um pacote chamado “dplyr”</p>
+<pre class="r"><code>install.packages(&quot;dplyr&quot;)</code></pre>
+<p>Após instalarmos o pacote, devemos habilitá-lo com uma função chamada <code>library()</code></p>
+<pre class="r"><code>library(dplyr)</code></pre>
+<p>Caso o pacote não esteja no CRAN, mas sim no Github, devemos instalar o pacote com o auxilio de uma função chamada <code>install_github()</code> do pacote <code>devtools</code>.</p>
+<pre class="r"><code>install.packages(&quot;devtools&quot;)
 
+library(devtools)
 
-                                                               Caso o pacote não esteja no CRAN, mas sim no Github, devemos instalar o pacote com o auxilio de uma função chamada `install_github()` do pacote `devtools`.
-                                                               
-                                                               
-                                                               ```r
-                                                               install.packages(&quot;devtools&quot;)
-                                                               
-                                                               library(devtools)
-                                                               
-                                                               install_github(&quot;abjur/abjutils&quot;)
-                                                               
-                                                               library(abjutils)
-                                                               ```</code></pre>
+install_github(&quot;abjur/abjutils&quot;)
+
+library(abjutils)</code></pre>
 </div>
 </div>
 <div id="controladores-de-fluxo" class="section level2">

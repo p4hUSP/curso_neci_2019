@@ -5,7 +5,11 @@ output: html_document
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(fig.width=12, fig.height=8, warning=FALSE, message=FALSE, eval=FALSE)
+knitr::opts_chunk$set(fig.width=12,
+                      fig.height=8,
+                      warning=FALSE,
+                      message=FALSE,
+                      eval=FALSE)
 ```
 
 # But first... 
@@ -113,6 +117,7 @@ Uma das funcionalidades mais básicas do __R__ é realização de operações ma
 
 5 / 2 # Divisão
 ```
+
 # Objetos e atribuições I
 
 “To understand computations in R, two slogans are helpful:
@@ -326,7 +331,6 @@ Perceba então que para construir um vetor basta colocarmos os valores dentro de
 
 ### Indexando vetores
 
-
 Dado que criamos objetos, podemos acessar os valores específicos a partir da posição dentro do vetor, como por exemplo, se quisermos acessar o primeiro elemento do `presidente_eleito`, isto é, "Dutra". Para isso basta colocarmos `[]` após o vetor e dentro dele a posição de interesse.
 
 ```{r}
@@ -340,7 +344,6 @@ porcentagem[c(1,2)]
 
 vitoria_uf[3:4] # Equivalente: vitoria_uf[c(3,4)]
 ```
-
 
 ### Listas
 
@@ -388,6 +391,7 @@ tabela <- data.frame(presidente_eleito = c("Dutra", "Vargas", "JK", "Janio Quadr
 Agora que criamos nosso primeiro dataframe podemos pensar em mais diferenças em relação à manipulação de dados em outros softwares.
 No R, não existe a possibilidade de manipulararmos os dados direto do dataframe. Por isso, usamos funções (que logo mais veremos com mais calma) para conhecer melhor o dataframe.
 
+```{r}
 View(tabela) # mostra o banco no console
 head (tabela) # mostra as seis primeiras linhas do banco no console
 str(tabela)# mostra a estrutura da tabela
@@ -396,9 +400,7 @@ names(tabela) # mostra o nome das variáveis
 nrow(tabela) # nº de linhas
 ncol(tabela) #nº de colunas
 dim(tabela) # dimensões
-
-
-
+```
 
 #### Indexando 
 
@@ -481,36 +483,36 @@ strsplit("Aprender sobre funcoes pode ser divertido", " ")
 
 Se você tiver mais interesse em saber sobre funções [clique aqui!](https://www.datacamp.com/community/tutorials/functions-in-r-a-tutorial#what)
                                                                    
-                                                                   ### Pacotes
+### Pacotes
                                                                    
-                                                                   Segundo a definição do livro R Packages, escrito por Hadley Wickham, um pacote é uma unidade fundamental de compartilhamento de códigos, dados, documentação e testes. Em outras palavras, os pacotes são coleções de códigos (funções) e dados desenvolvidos pela comunidade.
+Segundo a definição do livro R Packages, escrito por Hadley Wickham, um pacote é uma unidade fundamental de compartilhamento de códigos, dados, documentação e testes. Em outras palavras, os pacotes são coleções de códigos (funções) e dados desenvolvidos pela comunidade.
                                                                    
-                                                                   Estes pacotes ficam localizados no que chamamos de repositório. O principal repositório recebe o nome de **C**omprehensive **R** **A**rchive **N**etwork, o também chamado, CRAN. Mas existem outros também, como o Github, no qual a forma de obter os pacotes muda. Mas como instalamos um pacote no R? A resposta é simples, utilizamos uma função chamada `install.packages()` em que o argumento principal é o nome do pacote que queremos instalar.
+Estes pacotes ficam localizados no que chamamos de repositório. O principal repositório recebe o nome de **C**omprehensive **R** **A**rchive **N**etwork, o também chamado, CRAN. Mas existem outros também, como o Github, no qual a forma de obter os pacotes muda. Mas como instalamos um pacote no R? A resposta é simples, utilizamos uma função chamada `install.packages()` em que o argumento principal é o nome do pacote que queremos instalar.
                                                                    
-                                                                   Uma peculiaridade desta função é que por padrão ela instala os pacotes que estão no CRAN, como por exemplo, vamos instalar um pacote chamado "dplyr"
+Uma peculiaridade desta função é que por padrão ela instala os pacotes que estão no CRAN, como por exemplo, vamos instalar um pacote chamado "dplyr"
                                                                    
-                                                                   ```{r}
-                                                                   install.packages("dplyr")
-                                                                   ```
+```{r}
+install.packages("dplyr")
+```
                                                                    
-                                                                   Após instalarmos o pacote, devemos habilitá-lo com uma função chamada `library()`
+Após instalarmos o pacote, devemos habilitá-lo com uma função chamada `library()`
                                                                    
-                                                                   ```{r}
-                                                                   library(dplyr)
-                                                                   ```
+```{r}
+library(dplyr)
+```
 
 
-                                                                   Caso o pacote não esteja no CRAN, mas sim no Github, devemos instalar o pacote com o auxilio de uma função chamada `install_github()` do pacote `devtools`.
+Caso o pacote não esteja no CRAN, mas sim no Github, devemos instalar o pacote com o auxilio de uma função chamada `install_github()` do pacote `devtools`.
                                                                    
-                                                                   ```{r}
-                                                                   install.packages("devtools")
+```{r}
+install.packages("devtools")
                                                                    
-                                                                   library(devtools)
+library(devtools)
                                                                    
-                                                                   install_github("abjur/abjutils")
+install_github("abjur/abjutils")
                                                                    
-                                                                   library(abjutils)
-                                                                   ```
+library(abjutils)
+```
 
 
 ## Controladores de Fluxo
