@@ -1,0 +1,102 @@
+---
+title: "Curso NECI - Parte II"
+author: "P4H"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width=12,
+                      fig.height=8,
+                      warning=FALSE,
+                      message=FALSE,
+                      eval=FALSE)
+```
+
+## Como abrir arquivos TXT, CSV e Arquivos Delimitados?
+
+Neste workshop e nos próximos iremos utilizar um pacote chamado `tidyverse`. Segundo o [site do pacote](https://www.tidyverse.org/packages/), o `tidyverse`
+
+> is an opinionated collection of R packages designed for data science. All packages share an underlying design philosophy, grammar, and data structures.
+Como ele é uma coleção de pacotes para ciência de dados, temos como utilizar funções que vão desde como importar um dado, até como fazer visualizações e muito mais!
+
+Dentro da área de importar dados, sobretudo, os tabulares, o `tidyverse` oferece a oportunidade de trabalharmos com os seguintes pacotes e suas funções:
+
+- `readr`: Para importar arquivos que possuem delimitadores (.csv e .txt)
+
+- `readxl`: Para importar arquivos do Excel (.xls e .xlsx)
+
+- `haven`: Para importar dados de arquivos, como por exemplo, SPSS e Stata
+
+Vamos lá!
+
+```{r eval = FALSE}
+library(tidyverse)
+```
+
+```{r eval = FALSE}
+# CSV
+w1_01 <- read_csv("data/w1_01.csv")
+# Delimitados
+w1_02 <- read_delim("data/w1_02.csv", delim = "@")
+```
+
+## Como abrir dados do Excel, SPSS e Stata?
+
+```{r eval = FALSE}
+# Excel
+w1_06 <- read_xlsx("data/w1_06.xlsx")
+# STATA
+w1_04 <- read_dta("data/w1_04.dta")
+# SPSS
+w1_05 <- read_sav("data/w1_05.sav")
+```
+
+Pronto! É assim que se importam dados para o R, muito fácil, não? Vamos para um desafio maior!
+
+Uma das principais diferenças entre o Excel e o R (linguagens de programação em geral) é que o primeiro te mantem preso a uma lógica de como as coisas devem funcionar, enquanto o segundo te permite criar diversas soluções. Um exemplo disso, é o webScraping, que nada mais é que uma forma de extrair dados de sites utilizando códigos.
+
+## Acessando bancos do Access por meio do pacote DBI
+
+Primeiramente, vamos instalar o pacote DBI com o comando `install.packages("DBI")` e carregá-lo no nosso R com `library("DBI")`. Precisamos fazer a mesma coisa com o pacote `odbc`.
+
+Muitos bancos de dados em empresas e centros de pesqusia (como o NECI por exemplo) se encontram organizados em bancos SQL. Existe uma diversidade de programas para organizar bancos de dados (PostgreSQL, MySQL, Access, etc.). Embora seja possível interagir com eles a partir de programas voltados para a linguagem SQL, é possível estabelecer uma conexão entre o nosso R e o gerenciador de bancos de dados. Para isso, utilizamos o pacote DBI
+
+```{r}
+library(DBI)
+
+driver <- "Driver={Microsoft Access Driver (*.mdb, *.accdb)}; "
+database <- "Dbq=E:/db_test.mdb" #Repare que é preciso referenciar o caminho do seu banco de dados.
+
+cs <- paste0(driver, database)
+
+con <- dbConnect(odbc::odbc(), .connection_string = cs)
+```
+
+Com o objeto `con` criado, podemos utilizar frases de SQL para realizar as nossas requisições e obter os dados pretendidos.
+
+```{r}
+dbListTables(con) #Lista as tabelas disponíveis
+
+res <- dbSendQuery(con, "SELECT * FROM mtcars WHERE cyl = 4") # Prepara a requisição
+
+dbFetch(res) #Processo a requisição
+```
+
+
+Outra maneira de interagir com bancos de dados é por meio do `dplyr`. Para isso, precisamos _criar uma referência_ com a tabela desejada.
+
+```{r}
+tabela_x <- tbl(con, "nome_da_tabela")
+```
+
+Por fim, basta utilizar as funções do `dplyr`.
+
+```{r}
+tabela_x %>% 
+  select(coluna1, coluna2)
+
+tabela_x %>% 
+  mutate(nova_coluna = coluna1 * 100)
+```
+
+Contudo, não fique muito preocupado agora com as funções do `dplyr` ou com as frases de SQL. Iremos trabalhar com isso nas aulas de manipulação de dados.
