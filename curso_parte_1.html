@@ -310,7 +310,7 @@ is.na(99)</code></pre>
 <p>Queremos trabalhar com dados dos presidentes eleitos de 1945 até 1960, para isso podemos construir vetores que nos informem os nomes, a porcentagem de votos recebida, a quantidade de UF em que ele ganhou e se seu vice era do mesmo partido.</p>
 <pre class="r"><code>c(&quot;Dutra&quot;, &quot;Vargas&quot;, &quot;JK&quot;, &quot;Janio Quadros&quot;) # presidente eleito
 
-c(55.39, 48.73, 35.68, 48.26) # porcentagem 
+c(55.39, 48.73, 35.68, 48.26) # porcentagem
 
 c(23, 17, 15, 16) # vitoria em quantas UF
 
@@ -421,11 +421,11 @@ tabela$vice_igual_presid[1]</code></pre>
 <pre class="r"><code>library(dplyr)</code></pre>
 <p>Caso o pacote não esteja no CRAN, mas sim no Github, devemos instalar o pacote com o auxilio de uma função chamada <code>install_github()</code> do pacote <code>devtools</code>.</p>
 <pre class="r"><code>install.packages(&quot;devtools&quot;)
-                                                                   
+
 library(devtools)
-                                                                   
+
 install_github(&quot;abjur/abjutils&quot;)
-                                                                   
+
 library(abjutils)</code></pre>
 </div>
 </div>
@@ -541,11 +541,21 @@ print(tabela)</code></pre>
 <div id="exercicio-1-2" class="section level3">
 <h3>Exercicio 1</h3>
 <ol style="list-style-type: decimal">
-<li><p>Crie um vetor chamado candidatos com os nomes dos cadidatos presidenciais de 2018 pela ordem de votos do primeiro turno: <code>'Jair Bolsonaro'</code>, <code>'Fernando Haddad'</code>, <code>'Ciro Gomes'</code> e <code>'Geraldo Alckmin'</code> (nesta ordem).</p></li>
-<li><p>Em seguida crie outro vetor chamado votos com os números de votos dos quatro primeiros colocados para a eleição presidencial de 2018: 49.276.990, 31.342.005, 13.344.366 e 5.096.349.</p></li>
-<li><p>A partir desses dois vetores crie um data frame que apresente os nomes dos candidatos e os números de votos desses candidatos no primeiro turno.</p></li>
-<li><p>Em seguida crie mais uma coluna para esse data frame com o partido político que o candidato se candidatou: Jair Bolsonaro - PSL, Fernando Haddad - PT, Ciro Gomes - PDT e Geraldo Alckmin - PSDB.</p></li>
-<li><p>Utilizando a indexação, obtenha o número de votos e o partido dos candidatos Fernando Haddad e Ciro Gomes e armazene em vetores diferentes.</p></li>
+<li><p>Crie um dataframe dos quatro primeiros candidatos com as seguintes informações: Nome, Partido, Número de Votos e Porcentagem de Votos com base na imagem imgs/1turno.jpg.</p></li>
+<li>Usando a indexação, obtenha:</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>Todas as informações do candidato Ciro Gomes</li>
+<li>O partido de todos candidatos</li>
+<li>Todas as informações dos dois primeiros colocados</li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li>Obtenha:</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>A média de votos de todos os candidatos</li>
+<li>a soma de votos dos dois primeiros candidatos</li>
+<li>O desvio padrão dos votos</li>
 </ol>
 </div>
 </div>
@@ -554,9 +564,9 @@ print(tabela)</code></pre>
 <div id="exercicio-1-3" class="section level3">
 <h3>Exercicio 1</h3>
 <ol style="list-style-type: decimal">
-<li>Execute o código em data/eleicoes_sp.R para criar o data frame para o exercício. O data frame é o resultado da eleição do 1º turdo para governador do estado de São Paulo.</li>
-<li>Utilizando o laço FOR e o condicional IF/ELSE, crie uma coluna no data frame com o nome porcentagem de votos em que indique a porcentagem de votos obtida por cada candidato.</li>
-<li>Crie outra coluna com o nome resultado. O valor dessa coluna deve assumir o valor <code>&quot;Eleito&quot;</code> caso o candidato obteve mais de 50% dos votos. Caso nenhum candidato obteve essa porcentagem, os dois candidatos com maior porcentagem de votos devem ter a coluna com o valor <code>&quot;2º turno&quot;</code> e os demais como <code>&quot;Não Eleito&quot;</code>.</li>
+<li>Execute o código em data/eleicoes_sp.R para criar o data frame para o exercício. O data frame é o resultado da eleição do 1º turno de 2018 para governador do estado de São Paulo.</li>
+<li>Utilizando o laço FOR e o condicional IF/ELSE, crie uma coluna no data frame com o nome <code>“porcentagem_votos”</code> em que indique a porcentagem de votos obtida por cada candidato.</li>
+<li>Crie outra coluna com o nome “resultado”. O valor dessa coluna deve assumir o valor <code>&quot;Eleito&quot;</code> caso o candidato obteve mais de 50% dos votos. Caso nenhum candidato obteve essa porcentagem, os dois candidatos com maior porcentagem de votos devem ter a coluna com o valor <code>&quot;2º turno&quot;</code> e os demais como <code>&quot;Não Eleito&quot;</code>. Crie um script que utilize o laço <code>for</code> e o <code>if</code>/<code>else</code> para verificar as duas situações.</li>
 </ol>
 </div>
 </div>
