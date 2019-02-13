@@ -33,14 +33,14 @@ Uma das principais ferramentas que utilizaremos nesta parte é o `tidyverse`. Es
 
 Como já conversamos anteriormente, não iremos passar por todas as etapas do ciclo, mas caso tenha interesse em aprofundar seus conhecimentos basta acessar o livro [R for Data Science](https://r4ds.had.co.nz/).
 
-Pois bem para _instalar_ o tidyverse basta digitarmos `install.packages("tidyverse")` e a partir daí esperar a instalação de todos os pacotes (este processo pode demorar!). E assim como todos os pacotes intalados podemos habilitá-los utilizando `library(tidyverse)`. 
+Pois bem para _instalar_ o tidyverse basta digitarmos `install.packages("tidyverse")` e a partir daí esperar a instalação de todos os pacotes (este processo pode demorar!). E assim como todos os pacotes instalados podemos habilitá-los utilizando `library(tidyverse)`. 
 
 Como nosso foco é a manipulação de dados iremos trabalhar com os seguintes pacotes: `tidyr`, `dplyr`, `lubridate` e `stringr`. Utilizando como contexto as eleições de 2016 de SP, RJ e MG.
 
 Vamos começar habilitando o `tidyverse` e importando as tabelas `votacao_candidato.csv` e `candidatos.csv` para o ambiente do RStudio.
 
 ```{r}
-options(scipen=999) # Rodem isso antes, para nao termos problems com notacao cientifica
+options(scipen=999) # Rodem isso antes, para não termos problemas com notação científica
 library(tidyverse)
 
 votacao_candidato <- read_delim("data/votacao_candidato.gz", delim = ",") # Escolhi o read_delim para poder definir o separador
@@ -145,13 +145,13 @@ Ou seja, o primeiro argumento de qualquer um dos verbos é o banco de dados, seg
 
 ### `filter()`
 
-Quando estamos fazendo algumas análises, é comum encontrarmos observações que não nos interessam, como por exemplo, se estou fazendo uma análise sobre candidatos de São Paulo, espero que na minha base de dados tenham apenas candidatos percentences a esta unidade federativa. Para isso utilizamos o `filter()`, vejamos o exemplo abaixo:
+Quando estamos fazendo algumas análises, é comum encontrarmos observações que não nos interessam, como por exemplo, se estou fazendo uma análise sobre candidatos de São Paulo, espero que na minha base de dados tenham apenas candidatos pertencentes a esta unidade federativa. Para isso utilizamos o `filter()`, vejamos o exemplo abaixo:
 
 ```{r}
 filter(candidatos, SG_UF == "SP")
 ```
 
-Lembra quando vimos operadores lógicos? Pois bem, eles são muito utilizados no `filter()`. Caso o nosso interesse seja não apenas filtrar os candidados de SP, mas também os candidatos à prefeitura adicionamos o nome da variável, seguido do condicional
+Lembra quando vimos operadores lógicos? Pois bem, eles são muito utilizados no `filter()`. Caso o nosso interesse seja não apenas filtrar os candidatos de SP, mas também os candidatos à prefeitura adicionamos o nome da variável, seguido do condicional
 
 ```{r}
 filter(candidatos, SG_UF == "SP", DS_CARGO == "PREFEITO")
@@ -163,7 +163,7 @@ E se além dos filtros propostos também quisermos separar os candidatos com gra
 filter(candidatos, SG_UF == "SP", DS_CARGO == "PREFEITO", DS_GRAU_INSTRUCAO %in% c("SUPERIOR COMPLETO", "SUPERIOR INCOMPLETO")) # perceba a importancia de colocar as categorias que serao filtradas dentro de um vetor
 ```
 
-Vamos aproveitar para filtar os casos em que os Prefeitos concorram em agremiações diferentes de partidos isolados e guardar esse dado em um objeto chamado `pref_sup_SP`.
+Vamos aproveitar para filtrar os casos em que os Prefeitos concorram em agremiações diferentes de partidos isolados e guardar esse dado em um objeto chamado `pref_sup_SP`.
 
 ```{r}
 pref_sup_SP <- filter(candidatos, SG_UF == "SP", DS_CARGO == "PREFEITO", DS_GRAU_INSTRUCAO %in% c("SUPERIOR COMPLETO", "SUPERIOR INCOMPLETO"), TP_AGREMIACAO != "PARTIDO ISOLADO")
@@ -210,7 +210,7 @@ pref_sup_SP <- select(pref_sup_SP, -DT_GERACAO, -HH_GERACAO, -NR_PROCESSO)
 
 Caso tenhamos interesse em alterar ou criar uma variável, podemos utilizar o `mutate()`. Vamos aproveitar e:
 
-- Alterar DT_NASCIMENTO_ANO para númerico
+- Alterar DT_NASCIMENTO_ANO para numérico
 
 - Criar a variável IDADE_ATUAL como a diferença entre 2019 e DT_NASCIMENTO_ANO.
 
@@ -252,7 +252,7 @@ tabela_pref_40  <- rename(tabela_pref_40, Quantidade = n)
 
 ### `group_by()` e `summarise()`
 
-O `group_by()` e `summarise()` são funções que trabalham, na maioria das vezes, juntas. Eles servem para sumarizar os dados de acordo com grupos, ou seja, a contagem que haviamos feito com o `count()` pode ser reproduzida aqui da seguinte forma:
+O `group_by()` e `summarise()` são funções que trabalham, na maioria das vezes, juntas. Eles servem para sumarizar os dados de acordo com grupos, ou seja, a contagem que havíamos feito com o `count()` pode ser reproduzida aqui da seguinte forma:
 
 ```{r}
 temp_1 <- group_by(pref_sup_SP, CATEGORIA_IDADE)
@@ -262,7 +262,7 @@ summarise(temp_1, Quantidade = n())
 
 O objeto `temp_1` é uma tabela agrupada! Visualmente ela parece normal, porém qualquer operação feita nela será realizada de acordo com os grupos nos quais ela encontrou, que neste caso é: MAIOR QUE 40 e MENOR QUE 40.
 
-Quando utilizamos o summarise, iremos agrupar as categorias em torno de uma estatística, no caso, a contagem. Para fazer isso, utilizamos a função `n()`, uma função utilizada para contar obervações. Caso a variável que fossemos sumarizar fosse númerica, poderiamos utilizar a média (`mean()`), mediana (`median()`) e assim por diante.
+Quando utilizamos o summarise, iremos agrupar as categorias em torno de uma estatística, no caso, a contagem. Para fazer isso, utilizamos a função `n()`, uma função utilizada para contar observações. Caso a variável que fossemos sumarizar fosse numérica, poderíamos utilizar a média (`mean()`), mediana (`median()`) e assim por diante.
 
 Portanto, a vantagem do `group_by()` e `summarise()` é que conseguimos sumarizar com outras estatísticas além da contagem. Vejamos o exemplo abaixo. Estamos agrupando pela categoria de idade e a cor/raça do candidato. Após isto, estamos contando o número de observações que apresentam estas categorias.
 
@@ -285,7 +285,7 @@ rename(count(mutate(select(filter(candidatos, SG_UF == "SP", DS_CARGO == "PREFEI
        IDADE_ATUAL = 2019 - DT_NASCIMENTO_ANO, CATEGORIA_IDADE = ifelse(IDADE_ATUAL <= 40, "MENOR QUE 40", "MAIOR QUE 40")), CATEGORIA_IDADE), Quantidade = n)
 ```
 
-Para solucionar este problema os desenvolvedores do pacote incluiram um operador chamado de pipe (`%>%`). Basicamente ele permite que possamos contruir códigos de forma linear, como podemos notar abaixo!
+Para solucionar este problema os desenvolvedores do pacote incluíram um operador chamado de pipe (`%>%`). Basicamente ele permite que possamos construir códigos de forma linear, como podemos notar abaixo!
 
 ```{r}
 candidatos %>% 
@@ -355,7 +355,7 @@ inner_join(tbl_votos, tbl_empresas, by = c("ID" = "ID_CANDIDATO"))
 
 ### `left_join()` e `right_join()`
 
-  Nesse caso pensamos se queremos que a nossa tabela pós join tenha o número de linhas da tabela da esqueda (`left_join`) ou da tabela da direita (`right_join`), utilizando o mesmo padrão do exemplo anterior.
+  Nesse caso pensamos se queremos que a nossa tabela pós join tenha o número de linhas da tabela da esquerda (`left_join`) ou da tabela da direita (`right_join`), utilizando o mesmo padrão do exemplo anterior.
   
 ```{r}
 # Left join
@@ -393,7 +393,7 @@ anti_join(tbl_empresas, tbl_votos, by = c("ID_CANDIDATO" = "ID")) # lembre-se de
 
 # Wrap-up
 
-Vamos juntar tudo o que aprendemos e tirar alguma informação dos dados? Quantos votos em média vereadorxs recebem por município e genêro?
+Vamos juntar tudo o que aprendemos e tirar alguma informação dos dados? Quantos votos em média vereadorxs recebem por município e gênero?
 
 A primeira tarefa que fazemos é entender como os dados estão organizados. Para isso utilizamos uma função que chama `glimpse()`
 
@@ -405,7 +405,7 @@ glimpse(candidatos)
 glimpse(votacao_candidato)
 ```
 
-Esta função nos permite ver os tipos de dados que estamos lidando, o número de observações e variáveis. Se nós percebermos bem, existe uma variável que liga os dois dataframes, a variavel SQ_CANDIDATO! Não se esqueçam dela, pois ela é o identificador das tabelas.
+Esta função nos permite ver os tipos de dados que estamos lidando, o número de observações e variáveis. Se nós percebermos bem, existe uma variável que liga os dois dataframes, a variável SQ_CANDIDATO! Não se esqueçam dela, pois ela é o identificador das tabelas.
 
 Após isto, vamos calcular os votos totais da tabela "votacao_candidato", filtrando e agrupando os dados de interesse.
 
